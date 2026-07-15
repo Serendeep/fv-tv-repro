@@ -1,0 +1,18 @@
+[project]
+name = "fvtv-repro"
+version = "0.1.0"
+description = "FV x TV reproducibility study (BlackboxNLP 2026 repro track)"
+requires-python = ">=3.12"
+dependencies = [
+    "nnsight>=0.7,<0.8",
+    "torch>=2.1",
+    "numpy",
+    "scipy",
+    "pandas",
+    "matplotlib",
+    "requests",
+    "pyyaml",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]

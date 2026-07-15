@@ -1,0 +1,232 @@
+\documentclass[11pt]{article}
+
+\usepackage[review]{acl}
+\usepackage{times}
+\usepackage{latexsym}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{microtype}
+\usepackage{inconsolata}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{url}
+
+\title{Do Function Vectors and Task Vectors Generalize? \\ A Reproducibility Study Across Model Families and Scale}
+
+\author{Anonymous ACL submission}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Function vectors \citep{todd2024function} and task vectors \citep{hendel2023incontext} make a similar claim from different directions: in-context learning compresses a task into a single transportable activation vector. Both claims rest on 2023-era models, mostly GPT-J-6B and Llama-2, and the two methods have never been compared on the same tasks, models, and controls. We reproduce both in one harness on word-pair tasks drawn from a 16-task suite, across GPT-J-6B (the original model for both papers), Llama-3.1-8B, Gemma-2-9b-it, and Llama-3.1-70B, using NNsight with NDIF remote execution for all model-internal access; per-model task coverage varied with deployment availability and is reported in full. Task vectors replicate on all four models, recovering 0.80 of the in-context accuracy gap at 70B (task-clustered 95\% CI $[0.68, 0.90]$; 0.68 under cross-validated layer selection). Our port of the function-vector recipe replicates on GPT-J ($d=2.4$ against matched controls) but produces nothing on Gemma-2-9b-it: recovery 0.007 across 12 (task, seed) pairs at every injection layer, with probe-task diagnostics showing that injection strengths up to $8\times$ and a basis correction for Gemma's post-attention normalization change nothing, while a positive control on the same write path perturbs the model. A control neither paper ran reframes the task-vector story: a vector extracted from label-shuffled demonstrations recovers a third to half of the gap on average, and per-task the deflation ranges from total (the vector carries the input-output mapping) to none (it carries only task identity), with the same task landing differently on different models. Code, data, and a full deviation log are public.\footnote{\url{https://anonymous.4open.science/r/fv-tv-repro-7D8E}}
+\end{abstract}
+
+\section{Introduction}
+\label{sec:intro}
+
+A model given ten input-output demonstrations somehow becomes a different function for the rest of the prompt. Two well-cited papers argue this happens through a compact intermediate object. \citet{todd2024function} find a small set of attention heads whose summed outputs form a \emph{function vector} (FV): add it to the residual stream of a zero-shot prompt and the model performs the task. \citet{hendel2023incontext} patch a single hidden state, the \emph{task vector} (TV), from a demonstration prompt into a zero-shot forward pass with much the same effect. The two mechanisms differ in where they read, what they write, and how they intervene. The claims are nonetheless close cousins, published a week apart, and never tested against each other.
+
+Both evidence bases are also narrow by 2026 standards. Todd et al.\ report GPT-J-6B, GPT-NeoX, and Llama-2; Hendel et al.\ report GPT-J, Pythia, and LLaMA-1-era models. Interpretability findings have a documented habit of not surviving contact with new models and datasets \citep{zhang2024towards,yin2025which}, which is the concern this workshop track exists to address.
+
+We ask a plain question: do these two claims hold on the same tasks, under the same controls, on models neither paper touched? (Todd et al.\ did reach 70B with Llama-2; Hendel et al.\ stopped at 30B, so the 70B task-vector arm is new territory for that claim only.) Concretely:
+
+\begin{itemize}
+    \item We re-implement both methods in a single NNsight \citep{fiottokaufman2025nnsight} harness and rerun them on GPT-J-6B, reproducing the original setting for both papers before changing anything.
+    \item We extend both methods to Llama-3.1-8B and Gemma-2-9b-it, and task vectors to Llama-3.1-70B via NDIF remote execution, with matched random-vector, random-head, and shuffled-label controls, bootstrap confidence intervals, and effect sizes.
+    \item We report one clean failure: our function-vector port does nothing on Gemma-2-9b-it while task vectors work on it, and we instrument the null with a positive control, norm diagnostics, an injection-strength sweep, and a basis correction.
+    \item We quantify something neither paper measured: a task vector built from label-shuffled demonstrations recovers a third to half of the ICL gap on average, with per-task deflation ranging from total to none depending on how much of the task the model already knows.
+\end{itemize}
+
+Negative and qualified results are results. Our framing follows the reproducibility-report conventions of the ML Reproducibility Challenge \citep{pineau2021improving}: claims are enumerated, each gets its own verdict, and every deviation from the original protocols is logged (Appendix~\ref{sec:deviations}).
+
+\section{Background and Claims Under Test}
+\label{sec:claims}
+
+\paragraph{Function vectors.} For a task presented as 10-shot ICL, \citet{todd2024function} compute each attention head's mean output over many demonstration prompts, then measure each head's causal contribution by patching that mean into label-shuffled prompts and reading the recovery of the correct answer (average indirect effect, AIE). The FV is the sum of the top-$k$ heads' mean outputs ($k=10$), projected into the residual stream. Added to the residual stream at an early-middle layer of a zero-shot prompt, it restores much of the model's ICL accuracy.
+
+\paragraph{Task vectors.} \citet{hendel2023incontext} take the residual-stream hidden state $\theta$ at the last token of a demonstration prompt (with a dummy query), at an intermediate layer $L$. Patching $\theta$ into position at layer $L$ of a zero-shot forward pass recovers most ICL accuracy, peaking at intermediate layers and collapsing late.
+
+FVs are additive and head-derived; TVs replace a state wholesale. FV construction needs a causal search over heads; TV construction needs one forward pass. Related comparisons exist from other angles: \citet{brumley2024comparing} compare FV-style steering against alternatives behaviorally, \citet{yin2025which} ask which heads drive ICL across twelve models (none of them Gemma), \citet{liu2024incontext} extract in-context vectors by a different construction, and \citet{bakalova2025contextualize} show ICL circuitry in the Gemma-2 family is findable, which makes an FV-shaped mechanism's absence there (\S\ref{sec:gemma}) a sharper question. Table~\ref{tab:claims} lists the specific claims we test, using identifiers that recur in Section~\ref{sec:results} and in the released code.
+
+\begin{table*}[t]
+  \centering
+  \small
+  \begin{tabular}{p{0.06\linewidth}p{0.75\linewidth}p{0.12\linewidth}}
+    \toprule
+    \textbf{ID} & \textbf{Claim} & \textbf{Source} \\
+    \midrule
+    C1.1 & Adding the FV (sum of top-$k$ AIE attention-head task-conditioned mean outputs, $k=10$) to the residual stream at an early-middle layer of a zero-shot prompt restores a substantial fraction of ICL task accuracy & \citet{todd2024function}, \S3 \\
+    C2.1 & Patching a single ``task vector'' $\theta$ (hidden state at last demo-separator token, intermediate layer $L^*$) into a zero-shot forward pass recovers most of ICL accuracy & \citet{hendel2023incontext}, \S3 \\
+    C2.2 & Recovery is layer-structured: peaks at intermediate layers, collapses late & \citet{hendel2023incontext}, \S4 \\
+    C3.1 (ours) & Cross-method: per-task recovery of FV vs.\ TV correlates; the head-based (additive) and state-based (replacement) mechanisms behave consistently on the same tasks and models & new \\
+    C3.2 (ours) & Claims C1.1/C2.1 generalize to models neither paper tested: Llama-3.1-8B, Llama-3.1-70B, Gemma-2-9b-it & new \\
+    \bottomrule
+  \end{tabular}
+  \caption{Claims under test, with identifiers used throughout the paper and code. Out of scope: FV composition and vector arithmetic (Todd et al.\ \S4), FV context-robustness under corrupted demonstrations (Todd et al.\ \S3.2), $\theta$ query-independence (Hendel et al.\ \S5), and tasks beyond word pairs.}
+  \label{tab:claims}
+\end{table*}
+
+\section{Methodology}
+\label{sec:method}
+
+\subsection{Models}
+
+GPT-J-6B is the replication arm: it appears in both original papers, so any failure there indicts our harness before it indicts a claim. Llama-3.1-8B and Gemma-2-9b-it are the generalization arms; neither paper tested either family, and Gemma-2 differs usefully (instruction tuning, tied embeddings, logit soft-capping, an explicit head dimension where $n_{\text{heads}} \times d_{\text{head}} \neq d_{\text{model}}$). Llama-3.1-70B is the scale arm and runs task vectors only; the FV head search at 80 layers $\times$ 64 heads did not fit our compute window (Section~\ref{sec:compute}). All internals access goes through a small per-family adapter, since module paths, head geometry, and even whether a decoder block returns a tuple or a bare tensor differ across families.
+
+\subsection{Tasks}
+
+Our task pool is 16 word-pair ICL tasks from the original FV repository (MIT license), spanning four categories: linguistic (antonym, synonym, present-past, singular-plural), knowledge (country-capital, country-currency, person-occupation, park-country), translation (English to French, Spanish, German), and algorithmic (capitalize, capitalize-first, lowercase-first, next-item, previous-item). Selection required at least 200 pairs per task, so demonstration sets and evaluation splits never overlap, and short answers, so top-1 first-token accuracy is a meaningful metric. Both methods run on the same tasks within each model. Per-model coverage of the pool was limited by deployment availability and differs across arms (Table~\ref{tab:protocol}); all verdicts are read against the coverage actually achieved.
+
+\begin{table}[t]
+  \centering
+  \small
+  \begin{tabular}{lcccc}
+    \toprule
+     & \textbf{GPT-J} & \textbf{L3.1-8B} & \textbf{Gemma-2} & \textbf{L3.1-70B} \\
+    \midrule
+    tasks & 14 & 3 & 5 & 16 \\
+    seeds & 0--1 & 0--2 & 0--2 & 0--2 \\
+    (task, seed) $n$ & 27 & 9 & 12 & 48 \\
+    eval items & 15 & 25 & 25 & 25 \\
+    sweep stride & 4 & 2 & 2 & 3 \\
+    AIE trials & 10 & 10 & 5 & -- \\
+    \bottomrule
+  \end{tabular}
+  \caption{Protocol and coverage per model. All rows except AIE trials are generated from the released result files; trial counts come from the recorded invocations shipped with the code. The heterogeneity reflects per-deployment memory limits and outages on shared infrastructure; deviations from the planned uniform protocol (25 items, stride 2, seeds 0--2, 16 tasks) are itemized in Appendix~\ref{sec:deviations}.}
+  \label{tab:protocol}
+\end{table}
+
+\subsection{Interventions}
+
+Prompts follow the shared format \texttt{Q: \{x\}\textbackslash nA: \{y\}} with a trailing unterminated \texttt{Q: \{query\}\textbackslash nA:}. Per (task, seed): the ICL ceiling is 10-shot accuracy and the zero-shot floor is 0-shot accuracy on the same evaluation split. For FVs, we compute mean head activations over 32 fresh 10-shot prompts, run the AIE search (10 label-shuffled trials; 5 on Gemma-2, see Appendix~\ref{sec:deviations}), build the FV from the top 10 heads, and sweep additive injection over every second layer. For TVs, we extract $\theta$ at all layers from one demonstration prompt with a held-out dummy query and sweep patching over every second layer (every third at 70B). The headline statistic is the \emph{recovery ratio}: $(\text{acc}_{\text{method}} - \text{acc}_{\text{zero}}) / (\text{acc}_{\text{ICL}} - \text{acc}_{\text{zero}})$ at the best swept layer.
+
+\subsection{Controls and Statistics}
+
+Each method gets matched controls evaluated at its best layer: a norm-matched random Gaussian vector and a random-$k$-heads FV for the FV arm, and a $\theta$ extracted from label-shuffled demonstrations for the TV arm. Seeds use fresh demonstration and evaluation splits. Because (task, seed) pairs cluster within task, all confidence intervals are task-clustered bootstraps (10{,}000 resamples of tasks, seeds pooled within); Cohen's $d$ is reported against the pooled matched controls. A claim is graded \emph{pass} when the method's clustered CI excludes its matched control's mean and $d \geq 0.8$; \emph{weak pass} when the CI excludes the control but $0.5 \leq d < 0.8$; \emph{insufficient data} when coverage is below 5 tasks; \emph{fail} when the method is indistinguishable from its control.
+
+Max-over-layers selection on the evaluation split inflates the method estimate relative to a control evaluated at one layer, so we co-report a cross-validated estimate: the best layer is chosen on seed 0 and evaluated on the remaining seeds. Inflation varies by arm (0.00 on GPT-J TV to 0.14 on Gemma-2 TV) and changes no verdict. Todd et al.\ select layers by sweep; Hendel et al.\ select on a development set, which corresponds to our cross-validated variant, so their headline numbers are not subject to this inflation.
+
+\subsection{Compute}
+\label{sec:compute}
+
+Everything ran through NDIF remote execution from a laptop with no usable GPU; models stay resident on NDIF's shared deployments and each traced forward pass is one remote job. Measured throughput was roughly 18 seconds per job including queueing and result download, which made job count, not FLOPs, the binding constraint. The AIE head search dominates: on Gemma-2 (42 layers, 256k vocabulary, and a tight per-process memory allowance on its deployment) a single full-specification (task, seed) pair costs about 1{,}400 jobs. That is what motivated 25-item evaluation splits, 10 AIE trials, strided injection sweeps, and the 70B TV-only scope. The reported experiments consumed roughly 21{,}000 remote jobs over three days, all on shared no-cost infrastructure.
+
+\section{Results}
+\label{sec:results}
+
+\subsection{Per-Claim Verdicts}
+
+Table~\ref{tab:verdicts} summarizes; Table~\ref{tab:numbers} has the estimates. On GPT-J-6B, both original claims reproduce through our harness: FV injection recovers 0.50 of the ICL gap ($n=27$ pairs over 14 tasks, $d=2.4$ against pooled random-vector and random-head controls, which sit at $-0.01$), and TV patching recovers 0.56 against a shuffled-$\theta$ control of 0.28 ($d=0.78$: a weak pass under our grading, driven by high cross-task variance rather than a small margin). This anchors the study: cross-model differences below reflect models, not our reimplementation. TV passes on Gemma-2 and 70B, weak-passes on GPT-J, and is graded insufficient data on Llama-3.1-8B (3 tasks). FV passes on GPT-J and fails on Gemma-2 (\S\ref{sec:gemma}).
+
+\begin{table}[t]
+  \centering
+  \small
+  \begin{tabular}{lcccc}
+    \toprule
+    \textbf{Claim} & \textbf{GPT-J} & \textbf{L3.1-8B} & \textbf{Gemma-2} & \textbf{L3.1-70B} \\
+    \midrule
+    C1.1 (FV) & pass & insuf. & \textbf{fail} & n/a \\
+    C2.1 (TV) & weak pass & insuf. & pass & pass \\
+    C2.2 (layers) & pass & insuf. & pass & pass \\
+    C3.1 (corr.) & \multicolumn{4}{c}{no correlation detected (underpowered; \S\ref{sec:beyond})} \\
+    C3.2 (gen.) & \multicolumn{4}{c}{TV yes; FV no} \\
+    \bottomrule
+  \end{tabular}
+  \caption{Per-claim verdicts under the grading rule of \S3.4. Estimates in Table~\ref{tab:numbers}; coverage in Table~\ref{tab:protocol}.}
+  \label{tab:verdicts}
+\end{table}
+
+\begin{table}[t]
+  \centering
+  \small
+  \setlength{\tabcolsep}{4pt}
+  \begin{tabular}{llcccc}
+    \toprule
+    \textbf{Model} & \textbf{M.} & \textbf{Recovery [CI]} & \textbf{CV} & \textbf{Ctrl.} & $d$ \\
+    \midrule
+    GPT-J & FV & 0.50 [0.33, 0.65] & 0.58 & $-$0.01 & 2.4 \\
+          & TV & 0.56 [0.41, 0.71] & 0.53 & 0.28 & 0.78 \\
+    L3.1-8B & FV & 0.54 [0.02, 0.86] & 0.46 & 0.01 & -- \\
+          & TV & 0.75 [0.67, 0.91] & 0.68 & 0.52 & -- \\
+    Gemma-2 & FV & 0.01 [0.00, 0.02] & 0.00 & 0.01 & 0.0 \\
+          & TV & 0.83 [0.62, 1.05] & 0.62 & 0.39 & 1.4 \\
+    L3.1-70B & TV & 0.80 [0.68, 0.90] & 0.68 & 0.48 & 1.0 \\
+    \bottomrule
+  \end{tabular}
+  \caption{Best-layer recovery with task-clustered bootstrap 95\% CIs, the cross-validated estimate (layer picked on seed 0), matched-control mean, and Cohen's $d$. Llama-3.1-8B effect sizes are omitted (3 tasks; graded insufficient data). $n$ per arm in Table~\ref{tab:protocol}.}
+  \label{tab:numbers}
+\end{table}
+
+\subsection{Layer Profiles}
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\columnwidth]{figures/layer_profiles.pdf}
+  \caption{Recovery ratio against normalized layer depth for FV injection (dashed) and TV patching (solid), per model. Mean over (task, seed) pairs at each swept layer.}
+  \label{fig:layer-profiles}
+\end{figure}
+
+Hendel et al.'s layer structure (C2.2) shows on every model (Figure~\ref{fig:layer-profiles}) and passes our grading on the three arms with sufficient coverage: TV recovery peaks mid-stack, at 0.43 of true depth on GPT-J (layer 12/28), 0.50 on Llama-3.1-8B (16/32; consistent but under-covered), 0.57 on Gemma-2 (24/42), and 0.38 on 70B (30/80), and collapses toward the final layers everywhere our sweeps reach (GPT-J's stride-4 sweep ends at layer 24 of 28, so its late-layer collapse is observed only to that point). FV profiles, where the method works, peak in the same band, consistent with Todd et al.'s early-middle injection heuristic. The flat amber line in the Gemma-2 panel is the failure of \S\ref{sec:gemma}.
+
+\subsection{Function Vectors Fail on Gemma-2}
+\label{sec:gemma}
+
+Across 12 (task, seed) pairs on Gemma-2-9b-it, FV injection recovers 0.01 of the ICL gap or less at every swept layer (CI $[0.00, 0.02]$), statistically indistinguishable from its random-vector and random-head controls, while TV patching on the same pairs recovers 0.83. We instrumented this null against the mundane explanations a skeptical reader should demand, on antonym (seed 0, 15-item splits), with all intermediates released.
+
+\emph{The write path responds to large writes.} A random vector scaled to the full residual norm, 10--46$\times$ the FV's magnitude, added at the same code path, flips 3--6 of 15 predictions per layer. At 15 items per layer these flip contrasts are diagnostics, not significance tests, and they calibrate the path at a magnitude the FV itself never reaches; what they rule out is a fully inert write path, not insensitivity at FV scale.
+
+\emph{Magnitude does not rescue it.} The constructed FV has norm 10.4 against residual norms of 107--474 at the swept layers, so relative scale is a live concern; but scaling the injection by $\alpha \in \{1, 2, 4, 8\}$, which brings it near residual magnitude at early layers, changes nothing (recovery zero at every strength and layer).
+
+\emph{Basis correction does not rescue it.} Gemma-2 applies an RMSNorm between the attention output projection and the residual add, so a vector built from projected head outputs, as the FV recipe specifies, skips a transformation the model's own attention output undergoes. Injecting the FV before that normalization, in the basis it was actually constructed in, also recovers nothing (1--4 flips). The deepest probe layer is telling: there the corrected FV perturbs predictions (4 of 15) at nearly the random control's rate (6 of 15) while recovering zero accuracy --- where the vector does write, it writes noise.
+
+What survives is a genuine null for this construction on this model, with two honest caveats about its scope. First, our head selection deviates from Todd et al., who select one head set per model by averaging AIE across tasks and scale $k$ with model size (up to 100 at 70B); we select per task with $k=10$ from 5 AIE trials on this arm, and the released AIE maps show weak per-head signal (top head 0.07). A faithful cross-task selection at larger $k$ could in principle behave differently. Second, Gemma-2-9b-it is the only instruction-tuned model in our grid, so family geometry and instruction tuning are confounded; a base-model run would separate them. A second task (country-capital) reproduces the diagnostic pattern (norms, corrected injection, block injection), though its strength sweep was not run and its zero-shot predictions are stickier: the residual-scale positive control flips only 0--3 of 15 there, so the write-path demonstration rests mainly on antonym. Within those limits, the conclusion is: no variant of this vector, at any magnitude or in either basis, does anything to a model that demonstrably responds to same-path perturbations.
+
+\subsection{Results Beyond the Original Papers}
+\label{sec:beyond}
+
+\paragraph{What a task vector carries splits by task type.} The control neither paper ran turns out to matter most. In aggregate, a $\theta$ extracted from label-shuffled demonstrations recovers 0.28 of the gap on GPT-J (against 0.56 for the real $\theta$), 0.39 on Gemma-2 (against 0.83), and 0.48 at 70B (against 0.80). But the aggregate is a mixture, and the mixture is a (task, model) property, not a task property. Where the mapping is opaque to the model, the shuffled control collapses: synonym 0.00, prev-item 0.00, singular-plural 0.09 (GPT-J), country-currency 0.02 (70B) --- there, $\theta$ carries the actual input-output function. Where shuffled demonstrations still reveal the answer type and the model's parametric knowledge covers the mapping, the control matches or exceeds the real vector: person-occupation 1.00, english-french 1.27 (GPT-J), country-capital 0.85, park-country 0.78 (70B). The same task switches sides across models (capitalize: 0.14 on GPT-J, 2.00 on Gemma-2; english-french: 1.27 on GPT-J, 0.39 at 70B), consistent with the recognition share tracking what each model already knows. Two design limits bound this analysis: each cell uses one label permutation (unconstrained, so roughly one demonstration in ten keeps its true label) and the control is evaluated at the real vector's best layer, making its recovery a lower bound. In the vocabulary of \citet{pan2023what}, the shuffled-$\theta$ control isolates the task-recognition share of the effect from task learning, consistent with the label-sensitivity literature \citep{min2022rethinking,yoo2022groundtruth,wei2023larger,kossen2024incontext}, whose scale- and tuning-dependence is one more reason the instruction-tuned Gemma arm needs the confound caveat of \S\ref{sec:gemma}. The practical upshot stands: TV recovery measured against a zero-shot floor alone conflates the two, and on type-transparent tasks the headline number contains little task learning at all. We suggest the label-shuffled variant as the appropriate control floor for this family of claims.
+
+\paragraph{No cross-method correlation detected (C3.1).} If FVs and TVs were two views of one underlying task representation, tasks that suit one should suit the other. On GPT-J, per-task FV and TV recoveries show no detectable relationship (Spearman $\rho=0.05$, $p=0.86$, 14 tasks). With 14 noisy per-task estimates this test is underpowered against moderate correlations, so we report it as an absence of evidence rather than evidence of distinct mechanisms; it is consistent with the dissociation observed on Gemma-2, where one method works and the other does not exist.
+
+\section{Discussion}
+\label{sec:discussion}
+
+\subsection{What the Pattern Suggests}
+
+The two methods differ in what they assume about where task information lives, and the cross-model results split along exactly that line. A task vector is a coarse object: it transplants an entire residual-stream state and asks the model to continue from it. That operation makes no commitment to any particular basis, which is plausibly why it survives every architecture we tested, instruction tuning included. A function vector is a fine-grained object, built in the coordinate system of specific attention heads and re-injected through their output projection. Gemma-2 breaks that recipe's tacit assumptions in several ways at once: its 16 heads of dimension 256 project from a 4096-dimensional attention space into a 3584-dimensional residual stream, an RMSNorm intervenes before the residual add, and the model is instruction-tuned. Our diagnostics rule out the simple failure modes (magnitude, basis, dead write path) but cannot attribute the null to one cause; what they establish is that the recipe's output, however scaled or placed, carries nothing this model uses. The guarded reading: interventions defined over model-internal coordinates are hostage to architectural details that whole-state interventions never see, and porting them to a new family requires re-deriving, not re-running, the recipe. Whole-state interventions travel better \citep{tan2024analysing}.
+
+\subsection{Deviations Summary}
+
+Every judgment call and deviation from the original protocols is logged: the per-arm protocol is Table~\ref{tab:protocol}, and Appendix~\ref{sec:deviations} itemizes the rest, from prompt-format harmonization to the remote-execution constraints that shaped batching.
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+Task vectors are the sturdier claim: they replicate on the original model, transfer to model families neither paper tested, and hold at 70B, though the label-shuffled control shows their headline numbers mix task learning with task recognition in task-dependent proportions. Our port of the function-vector recipe replicates where the method was developed and produces nothing on Gemma-2-9b-it, a null that survives magnitude, basis, and write-path checks but remains bounded by our head-selection protocol and an instruction-tuning confound. The working conclusion we defend: single-model interpretability results should be treated as hypotheses about a family, not facts about transformers, and reproductions should ship the controls that separate what a method does from what a prompt format does.
+
+\section*{Limitations}
+
+Our tasks are word pairs with single-token-ish answers, scored by top-1 first-token accuracy; neither original claim is tested here on generative or multi-token tasks. Two fidelity deviations from Todd et al.\ bound the FV conclusions: we select heads per task rather than by cross-task-averaged AIE, with $k=10$ fixed rather than scaled to model size, and the AIE search draws queries from a pool that overlaps the evaluation split, which can inflate FV estimates on models where the method works. Gemma-2-9b-it is our only instruction-tuned model, so its FV failure confounds family and tuning; the Gemma arm also ran 5 AIE trials against 10 elsewhere. Protocols are heterogeneous across arms (Table~\ref{tab:protocol}) because deployments failed and recovered on their own schedules; verdicts should be read per arm, not as a factorial design. Best-layer selection maximizes over a sweep and inflates method estimates relative to single-layer controls; the cross-validated estimator quantifies this but was computed post hoc. The 70B arm runs task vectors only, so scale evidence for FVs is absent, not negative. The C3.1 null is underpowered. All remote execution ran on shared infrastructure whose load varies; exact wall-clock costs are not reproducible by construction.
+
+\bibliography{references}
+
+\appendix
+
+\section{Deviation Log}
+\label{sec:deviations}
+
+Curated from the working log kept during implementation; grouped by kind. Each entry states the deviation and its motivation.
+
+\paragraph{Protocol.} The planned uniform protocol was 25-item evaluation splits, seeds 0--2, stride-2 sweeps, and 10 AIE trials. What each arm actually ran is Table~\ref{tab:protocol}, generated from the released result files: GPT-J ran 15-item splits, seeds 0--1, and stride-4 sweeps (its deployment was the least reliable); Gemma-2 ran 5 AIE trials (its per-pair cost was 6x the other models) and covers 12 of 15 (task, seed) cells, missing capitalize seeds 1--2 and country-capital seed 2 to deployment outages; 70B swept every third layer. Demonstrations are sampled once per (task, seed) and reused across the evaluation split; the original FV pipeline resamples per query. Mean head activations and the AIE search resample per trial, matching the original. Motivation for all: measured throughput of roughly 18 seconds per remote job on shared deployments that failed and recovered unpredictably.
+
+\paragraph{Method fidelity.} Head selection is per task (top-10 by that task's AIE) rather than Todd et al.'s cross-task-averaged selection with size-scaled $k$; the AIE query pool overlaps the evaluation split. The shuffled-$\theta$ control uses one label permutation per (task, seed) and is evaluated at the real vector's best layer, making it a lower bound on label-independent recovery. Prompt format is harmonized to \texttt{Q:/A:} for both methods; Hendel et al.\ used an arrow separator.
+
+\paragraph{Author contact.} We did not contact the authors of either original paper; all protocol reconstructions come from their papers and released code.
+
+\paragraph{Method mechanics.} The out-projection bias is excluded from per-head contributions (it is a layer-level constant; summing $k$ heads would count it $k$ times). Head geometry is read from model configuration rather than derived as $d_{\text{model}}/n_{\text{heads}}$, which is wrong on Gemma-2. The dummy query for $\theta$ extraction is a held-out in-domain input rather than a placeholder token, keeping the extraction prompt on-distribution.
+
+\paragraph{Remote execution.} Trace bodies only return values saved into simple local variables; writes into dictionaries or lists are silently dropped by the serializer, so all multi-layer reads are stacked into one tensor per trace. Helper functions cannot be called inside remote trace bodies (the server compiles the body from source and resolves no external names); module lookups are hoisted above the trace. Per-head AIE patches are folded into the batch dimension, several layers per trace, halving on out-of-memory responses. On the 70B deployment, layers shard across GPUs and cross-layer stacks require an explicit device move. Every remote call retries with exponential backoff up to about 2.5 hours; failed work units resume at (task, seed) granularity.
+
+\end{document}

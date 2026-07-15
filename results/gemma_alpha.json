@@ -1,0 +1,34 @@
+[
+  {
+    "task": "antonym",
+    "alpha": 1.0,
+    "best_acc": 0.0,
+    "acc_icl": 0.6,
+    "acc_zero": 0.0,
+    "recovery_ratio": 0.0
+  },
+  {
+    "task": "antonym",
+    "alpha": 2.0,
+    "best_acc": 0.0,
+    "acc_icl": 0.6,
+    "acc_zero": 0.0,
+    "recovery_ratio": 0.0
+  },
+  {
+    "task": "antonym",
+    "alpha": 4.0,
+    "best_acc": 0.0,
+    "acc_icl": 0.6,
+    "acc_zero": 0.0,
+    "recovery_ratio": 0.0
+  },
+  {
+    "task": "antonym",
+    "alpha": 8.0,
+    "best_acc": 0.0,
+    "acc_icl": 0.6,
+    "acc_zero": 0.0,
+    "recovery_ratio": 0.0
+  }
+]

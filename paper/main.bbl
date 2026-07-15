@@ -1,0 +1,132 @@
+\begin{thebibliography}{15}
+\providecommand{\natexlab}[1]{#1}
+
+\bibitem[{Bakalova et~al.(2025)Bakalova, Veitsman, Huang, and
+  Hahn}]{bakalova2025contextualize}
+Aleksandra Bakalova, Yana Veitsman, Xinting Huang, and Michael Hahn. 2025.
+\newblock \href {https://arxiv.org/abs/2504.00132}
+  {Contextualize-then-aggregate: Circuits for in-context learning in {Gemma-2}
+  2b}.
+\newblock In \emph{Conference on Language Modeling (COLM)}.
+
+\bibitem[{Brumley et~al.(2024)Brumley, Kwon, Krueger, Krasheninnikov, and
+  Anwar}]{brumley2024comparing}
+Madeline Brumley, Joe Kwon, David Krueger, Dmitrii Krasheninnikov, and Usman
+  Anwar. 2024.
+\newblock \href {https://arxiv.org/abs/2411.07213} {Comparing bottom-up and
+  top-down steering approaches on in-context learning tasks}.
+\newblock \emph{arXiv preprint arXiv:2411.07213}.
+
+\bibitem[{Fiotto-Kaufman et~al.(2025)Fiotto-Kaufman, Loftus, Todd, Brinkmann,
+  Pal, Troitskii, Ripa, Belfki, Rager, Juang, Mueller, Marks, Sharma,
+  Lucchetti, Prakash, Brodley, Guha, Bell, Wallace, and
+  Bau}]{fiottokaufman2025nnsight}
+Jaden Fiotto-Kaufman, Alexander~R. Loftus, Eric Todd, Jannik Brinkmann, Koyena
+  Pal, Dmitrii Troitskii, Michael Ripa, Adam Belfki, Can Rager, Caden Juang,
+  Aaron Mueller, Samuel Marks, Arnab~Sen Sharma, Francesca Lucchetti, Nikhil
+  Prakash, Carla Brodley, Arjun Guha, Jonathan Bell, Byron~C. Wallace, and
+  David Bau. 2025.
+\newblock \href {https://arxiv.org/abs/2407.14561} {{NNsight} and {NDIF}:
+  Democratizing access to open-weight foundation model internals}.
+\newblock In \emph{International Conference on Learning Representations
+  (ICLR)}.
+
+\bibitem[{Hendel et~al.(2023)Hendel, Geva, and Globerson}]{hendel2023incontext}
+Roee Hendel, Mor Geva, and Amir Globerson. 2023.
+\newblock \href {https://arxiv.org/abs/2310.15916} {In-context learning creates
+  task vectors}.
+\newblock In \emph{Findings of the Association for Computational Linguistics:
+  EMNLP 2023}, pages 9318--9333, Singapore.
+
+\bibitem[{Kossen et~al.(2024)Kossen, Gal, and Rainforth}]{kossen2024incontext}
+Jannik Kossen, Yarin Gal, and Tom Rainforth. 2024.
+\newblock \href {https://arxiv.org/abs/2307.12375} {In-context learning learns
+  label relationships but is not conventional learning}.
+\newblock In \emph{International Conference on Learning Representations
+  (ICLR)}.
+
+\bibitem[{Liu et~al.(2024)Liu, Ye, Xing, and Zou}]{liu2024incontext}
+Sheng Liu, Haotian Ye, Lei Xing, and James~Y. Zou. 2024.
+\newblock \href {https://arxiv.org/abs/2311.06668} {In-context vectors: Making
+  in context learning more effective and controllable through latent space
+  steering}.
+\newblock In \emph{Proceedings of the 41st International Conference on Machine
+  Learning (ICML)}, volume 235, pages 32287--32307.
+
+\bibitem[{Min et~al.(2022)Min, Lyu, Holtzman, Artetxe, Lewis, Hajishirzi, and
+  Zettlemoyer}]{min2022rethinking}
+Sewon Min, Xinxi Lyu, Ari Holtzman, Mikel Artetxe, Mike Lewis, Hannaneh
+  Hajishirzi, and Luke Zettlemoyer. 2022.
+\newblock \href {https://arxiv.org/abs/2202.12837} {Rethinking the role of
+  demonstrations: What makes in-context learning work?}
+\newblock In \emph{Proceedings of the 2022 Conference on Empirical Methods in
+  Natural Language Processing (EMNLP)}.
+
+\bibitem[{Pan et~al.(2023)Pan, Gao, Chen, and Chen}]{pan2023what}
+Jane Pan, Tianyu Gao, Howard Chen, and Danqi Chen. 2023.
+\newblock \href {https://aclanthology.org/2023.findings-acl.527/} {What
+  in-context learning ``learns'' in-context: Disentangling task recognition and
+  task learning}.
+\newblock In \emph{Findings of the Association for Computational Linguistics:
+  ACL 2023}, pages 8298--8319.
+
+\bibitem[{Pineau et~al.(2021)Pineau, Vincent-Lamarre, Sinha, Lariviere,
+  Beygelzimer, d'Alche Buc, Fox, and Larochelle}]{pineau2021improving}
+Joelle Pineau, Philippe Vincent-Lamarre, Koustuv Sinha, Vincent Lariviere,
+  Alina Beygelzimer, Florence d'Alche Buc, Emily Fox, and Hugo Larochelle.
+  2021.
+\newblock \href {https://jmlr.org/papers/v22/20-303.html} {Improving
+  reproducibility in machine learning research (a report from the {NeurIPS}
+  2019 reproducibility program)}.
+\newblock \emph{Journal of Machine Learning Research}, 22(164):1--20.
+
+\bibitem[{Tan et~al.(2024)Tan, Chanin, Lynch, Paige, Kanoulas, Garriga-Alonso,
+  and Kirk}]{tan2024analysing}
+Daniel Tan, David Chanin, Aengus Lynch, Brooks Paige, Dimitrios Kanoulas,
+  Adri\`a Garriga-Alonso, and Robert Kirk. 2024.
+\newblock \href
+  {https://proceedings.neurips.cc/paper_files/paper/2024/hash/fb3ad59a84799bfb8d700e56d19c231b-Abstract-Conference.html}
+  {Analysing the generalisation and reliability of steering vectors}.
+\newblock In \emph{Advances in Neural Information Processing Systems
+  (NeurIPS)}, volume~37.
+
+\bibitem[{Todd et~al.(2024)Todd, Li, Sharma, Mueller, Wallace, and
+  Bau}]{todd2024function}
+Eric Todd, Millicent~L. Li, Arnab~Sen Sharma, Aaron Mueller, Byron~C. Wallace,
+  and David Bau. 2024.
+\newblock \href {https://arxiv.org/abs/2310.15213} {Function vectors in large
+  language models}.
+\newblock In \emph{International Conference on Learning Representations
+  (ICLR)}.
+
+\bibitem[{Wei et~al.(2023)Wei, Wei, Tay, Tran, Webson, Lu, Chen, Liu, Huang,
+  Zhou, and Ma}]{wei2023larger}
+Jerry Wei, Jason Wei, Yi~Tay, Dustin Tran, Albert Webson, Yifeng Lu, Xinyun
+  Chen, Hanxiao Liu, Da~Huang, Denny Zhou, and Tengyu Ma. 2023.
+\newblock \href {https://arxiv.org/abs/2303.03846} {Larger language models do
+  in-context learning differently}.
+\newblock \emph{arXiv preprint arXiv:2303.03846}.
+
+\bibitem[{Yin and Steinhardt(2025)}]{yin2025which}
+Kayo Yin and Jacob Steinhardt. 2025.
+\newblock \href {https://arxiv.org/abs/2502.14010} {Which attention heads
+  matter for in-context learning?}
+\newblock In \emph{International Conference on Machine Learning (ICML)}.
+
+\bibitem[{Yoo et~al.(2022)Yoo, Kim, Kim, Cho, Jo, Lee, Lee, and
+  Kim}]{yoo2022groundtruth}
+Kang~Min Yoo, Junyeob Kim, Hyuhng~Joon Kim, Hyunsoo Cho, Hwiyeol Jo, Sang-Woo
+  Lee, Sang-goo Lee, and Taeuk Kim. 2022.
+\newblock \href {https://arxiv.org/abs/2205.12685} {Ground-truth labels matter:
+  A deeper look into input-label demonstrations}.
+\newblock In \emph{Proceedings of the 2022 Conference on Empirical Methods in
+  Natural Language Processing (EMNLP)}, pages 2422--2437.
+
+\bibitem[{Zhang and Nanda(2024)}]{zhang2024towards}
+Fred Zhang and Neel Nanda. 2024.
+\newblock \href {https://arxiv.org/abs/2309.16042} {Towards best practices of
+  activation patching in language models: Metrics and methods}.
+\newblock In \emph{International Conference on Learning Representations
+  (ICLR)}.
+
+\end{thebibliography}
