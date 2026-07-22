@@ -1,4 +1,4 @@
-\begin{thebibliography}{15}
+\begin{thebibliography}{16}
 \providecommand{\natexlab}[1]{#1}
 
 \bibitem[{Bakalova et~al.(2025)Bakalova, Veitsman, Huang, and
@@ -37,6 +37,15 @@ Roee Hendel, Mor Geva, and Amir Globerson. 2023.
   task vectors}.
 \newblock In \emph{Findings of the Association for Computational Linguistics:
   EMNLP 2023}, pages 9318--9333, Singapore.
+
+\bibitem[{Ilharco et~al.(2023)Ilharco, Ribeiro, Wortsman, Gururangan, Schmidt,
+  Hajishirzi, and Farhadi}]{ilharco2023editing}
+Gabriel Ilharco, Marco~Tulio Ribeiro, Mitchell Wortsman, Suchin Gururangan,
+  Ludwig Schmidt, Hannaneh Hajishirzi, and Ali Farhadi. 2023.
+\newblock \href {https://arxiv.org/abs/2212.04089} {Editing models with task
+  arithmetic}.
+\newblock In \emph{International Conference on Learning Representations
+  (ICLR)}.
 
 \bibitem[{Kossen et~al.(2024)Kossen, Gal, and Rainforth}]{kossen2024incontext}
 Jannik Kossen, Yarin Gal, and Tom Rainforth. 2024.

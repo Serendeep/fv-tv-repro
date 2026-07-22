@@ -119,7 +119,9 @@ def layer_profiles(rows, models):
     return out
 
 
-def verdict(cohens_d, mean, control_mean):
+def verdict(cohens_d, mean, control_mean, n_tasks):
+    if n_tasks < 5:
+        return "INSUFFICIENT DATA"
     if math.isnan(cohens_d) or math.isnan(mean) or math.isnan(control_mean):
         return "INSUFFICIENT DATA"
     if mean > control_mean and cohens_d >= 0.8:
@@ -147,20 +149,26 @@ def main():
             if not method_by_pair:
                 continue
             method_values = list(method_by_pair.values())
-            mean, lo, hi = stats.bootstrap_ci(method_values)
+            method_by_task = {}
+            for (task, _seed), value in method_by_pair.items():
+                method_by_task.setdefault(task, []).append(value)
+            mean, lo, hi = stats.cluster_bootstrap_ci(method_by_task)
 
             control_by_key = control_recovery(rows, model, CONTROLS[method])
             control_values = list(control_by_key.values())
-            control_mean, _, _ = stats.bootstrap_ci(control_values) if control_values else (float("nan"), float("nan"), float("nan"))
+            control_by_task = {}
+            for (task, _seed, _control), value in control_by_key.items():
+                control_by_task.setdefault(task, []).append(value)
+            control_mean, _, _ = stats.cluster_bootstrap_ci(control_by_task) if control_values else (float("nan"), float("nan"), float("nan"))
             d = stats.cohens_d(method_values, control_values)
             net = mean - control_mean if is_num(mean) and is_num(control_mean) else float("nan")
 
             summary_rows.append({
                 "model": model, "method": method, "mean": mean, "ci_lo": lo, "ci_hi": hi,
-                "n_pairs": len(method_values), "control_mean": control_mean, "cohens_d": d,
+                "n_pairs": len(method_values), "n_tasks": len(method_by_task), "control_mean": control_mean, "cohens_d": d,
             })
 
-            v = verdict(d, mean, control_mean)
+            v = verdict(d, mean, control_mean, len(method_by_task))
             print_lines.append(
                 f"{method:4} {mean:7.3f} {lo:7.3f} {hi:7.3f} {len(method_values):4d}  "
                 f"{control_mean:7.3f} {net:7.3f} {d:6.2f}  {v}"
@@ -170,7 +178,7 @@ def main():
 
     summary_path = ROOT / "results" / "summary.csv"
     with open(summary_path, "w", newline="") as f:
-        w = csv.DictWriter(f, fieldnames=["model", "method", "mean", "ci_lo", "ci_hi", "n_pairs", "control_mean", "cohens_d"])
+        w = csv.DictWriter(f, fieldnames=["model", "method", "mean", "ci_lo", "ci_hi", "n_pairs", "n_tasks", "control_mean", "cohens_d"])
         w.writeheader()
         w.writerows(summary_rows)
 

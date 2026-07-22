@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2026.1.26)  15 JUL 2026 20:50
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2026.1.26)  22 JUL 2026 13:16
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -586,13 +586,8 @@ File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
 
 
 {/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-0.enc}]
-Underfull \hbox (badness 10000) in paragraph at lines 60--61
+Underfull \hbox (badness 10000) in paragraph at lines 61--62
 [][][]\T1/ptm/m/n/9 (+20) Todd et al.[][]
- []
-
-
-Underfull \hbox (badness 4543) in paragraph at lines 61--62
-[][][]\T1/ptm/m/n/9 (+20) Hendel et al.[][]
  []
 
 
@@ -601,41 +596,48 @@ Underfull \hbox (badness 4543) in paragraph at lines 62--63
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 63--63
-[]\T1/ptm/m/n/9 (+20) C3.1
+Underfull \hbox (badness 4543) in paragraph at lines 63--64
+[][][]\T1/ptm/m/n/9 (+20) Hendel et al.[][]
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 64--64
+[]\T1/ptm/m/n/9 (+20) C3.1
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 65--65
 []\T1/ptm/m/n/9 (+20) C3.2
  []
 
-
-Overfull \hbox (4.12955pt too wide) in paragraph at lines 56--67
- [][] 
- []
-
-
-Overfull \hbox (18.89645pt too wide) in paragraph at lines 85--97
- [][] 
- []
-
 LaTeX Font Info:    Font shape `T1/zi4/m/n' will be
-(Font)              scaled to size 10.95pt on input line 103.
-[2] [3]
-Overfull \hbox (28.63443pt too wide) in paragraph at lines 126--137
- [][] 
- []
+(Font)              scaled to size 10.95pt on input line 105.
+[2]
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
-<figures/layer_profiles.pdf, id=179, 244.35278pt x 222.46951pt>
+ [3]
+<figures/effect_summary.pdf, id=180, 252.75931pt x 193.28046pt>
+File: figures/effect_summary.pdf Graphic file (type pdf)
+<use figures/effect_summary.pdf>
+Package pdftex.def Info: figures/effect_summary.pdf  used on input line 169.
+(pdftex.def)             Requested size: 219.08614pt x 167.53625pt.
+<figures/layer_profiles.pdf, id=181, 244.35278pt x 222.46951pt>
 File: figures/layer_profiles.pdf Graphic file (type pdf)
 <use figures/layer_profiles.pdf>
-Package pdftex.def Info: figures/layer_profiles.pdf  used on input line 166.
+Package pdftex.def Info: figures/layer_profiles.pdf  used on input line 178.
 (pdftex.def)             Requested size: 219.08614pt x 199.47047pt.
 
-Underfull \vbox (badness 2050) has occurred while \output is active []
+[4 <./figures/effect_summary.pdf> <./figures/layer_profiles.pdf>]
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [4 <./figures/layer_profiles.pdf>] [5] (./main.bbl
+<figures/tv_shuffled_by_task.pdf, id=281, 251.79195pt x 200.50746pt>
+File: figures/tv_shuffled_by_task.pdf Graphic file (type pdf)
+<use figures/tv_shuffled_by_task.pdf>
+Package pdftex.def Info: figures/tv_shuffled_by_task.pdf  used on input line 20
+9.
+(pdftex.def)             Requested size: 219.08614pt x 174.4676pt.
+ [5]
+[6 <./figures/tv_shuffled_by_task.pdf>] (./main.bbl
 Underfull \hbox (badness 1337) in paragraph at lines 6--11
 \T1/ptm/m/n/10 (+20) and Michael Hahn. 2025.  [][]Contextualize-then-
  []
@@ -646,45 +648,44 @@ Underfull \hbox (badness 2368) in paragraph at lines 14--19
 arXiv preprint
  []
 
-[6]
-Underfull \hbox (badness 1052) in paragraph at lines 75--82
+
+Underfull \hbox (badness 1052) in paragraph at lines 84--91
 []\T1/ptm/m/n/10 (+20) Joelle Pineau, Philippe Vincent-Lamarre, Kous-tuv
  []
 
-) [7] [8
-
-] (./main.aux)
+) [7] [8] (./main.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2026-01-19>
  ***********
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: B1B555E03FEA2FCD515E018CF4E44C5C;2451.
+(rerunfilecheck)             Checksum: B568F6EADD1CDC6D91A50E77E8180F9B;2662.
  ) 
 Here is how much of TeX's memory you used:
- 15418 strings out of 467533
- 244753 string characters out of 5419489
- 723576 words of memory out of 5000000
- 43722 multiletter control sequences out of 15000+600000
- 688189 words of font info for 309 fonts, out of 8000000 for 9000
+ 15465 strings out of 467533
+ 245736 string characters out of 5419489
+ 722872 words of memory out of 5000000
+ 43746 multiletter control sequences out of 15000+600000
+ 691664 words of font info for 320 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 84i,11n,93p,2096b,622s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 84i,11n,93p,1784b,559s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2025/texmf-dist/fonts/type1/public/inconsolata/Inconsolat
 a-zi4r.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/c
 mmi10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cm
-mi9.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr1
-0.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.p
-fb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pf
-b></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb>
-</usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></
-usr/local/texlive/2025/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/loc
-al/texlive/2025/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive
-/2025/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2025/texm
-f-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (8 pages, 202628 bytes).
+mi7.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi
+9.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.
+pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb
+></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
+</usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></
+usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></us
+r/local/texlive/2025/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb></usr/local
+/texlive/2025/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2
+025/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2025/texmf-
+dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on main.pdf (8 pages, 238919 bytes).
 PDF statistics:
- 403 PDF objects out of 1000 (max. 8388607)
- 322 compressed objects within 4 object streams
- 59 named destinations out of 1000 (max. 500000)
- 60566 words of extra memory for PDF output out of 61914 (max. 10000000)
+ 502 PDF objects out of 1000 (max. 8388607)
+ 356 compressed objects within 4 object streams
+ 66 named destinations out of 1000 (max. 500000)
+ 64680 words of extra memory for PDF output out of 74296 (max. 10000000)
 

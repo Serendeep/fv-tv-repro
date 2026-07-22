@@ -1,0 +1,8 @@
+model,method,n_tasks,n_pairs,categories,tasks
+gpt-j-6b,fv,14,27,"alg. 5, know. 3, ling. 4, trans. 2","antonym, capitalize, capitalize_first_letter, country-capital, country-currency, english-french, english-german, lowercase_first_letter, next_item, person-occupation, present-past, prev_item, singular-plural, synonym"
+gpt-j-6b,tv,14,27,"alg. 5, know. 3, ling. 4, trans. 2","antonym, capitalize, capitalize_first_letter, country-capital, country-currency, english-french, english-german, lowercase_first_letter, next_item, person-occupation, present-past, prev_item, singular-plural, synonym"
+llama-3.1-8b,fv,3,9,"know. 1, ling. 2","antonym, person-occupation, singular-plural"
+llama-3.1-8b,tv,8,24,"alg. 1, know. 2, ling. 4, trans. 1","antonym, country-capital, english-french, next_item, person-occupation, present-past, singular-plural, synonym"
+gemma-2-9b-it,fv,5,12,"alg. 2, know. 1, ling. 2","antonym, capitalize, country-capital, next_item, synonym"
+gemma-2-9b-it,tv,5,12,"alg. 2, know. 1, ling. 2","antonym, capitalize, country-capital, next_item, synonym"
+llama-3.1-70b,tv,16,48,"alg. 5, know. 4, ling. 4, trans. 3","antonym, capitalize, capitalize_first_letter, country-capital, country-currency, english-french, english-german, english-spanish, lowercase_first_letter, next_item, park-country, person-occupation, present-past, prev_item, singular-plural, synonym"
