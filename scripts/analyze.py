@@ -2,7 +2,7 @@
 """Aggregate results/grid_*.json into summary.csv + layer_profiles.csv, print
 a per-model verdict table.
 
-Usage: .venv/bin/python scripts/analyze.py
+Usage: uv run python scripts/analyze.py
 """
 import csv
 import glob
@@ -17,12 +17,14 @@ sys.path.insert(0, str(ROOT / "src"))
 from fvtv import stats
 
 METHODS = ("fv", "tv")
+# True stack depth per model. layer_profiles normalizes by this, not by the
+# deepest swept layer, so the figure's x-axis matches the depth fractions the
+# paper quotes.
+N_LAYERS = {"gpt-j-6b": 28, "llama-3.1-8b": 32, "gemma-2-9b-it": 42, "llama-3.1-70b": 80}
 CONTROLS = {
-    # ponytail: fv has two matched controls (does the vector content matter /
-    # does head selection matter). Pool both into one control sample so
-    # summary.csv can keep a single control_mean/cohens_d per method row
-    # instead of forking the schema. Individual control means are still
-    # visible in the stdout table.
+    # FV has two matched controls: does the vector's content matter, and does
+    # head selection matter. Pooled into one sample so summary.csv keeps one
+    # control_mean/cohens_d per row; the stdout table still shows them apart.
     "fv": ("fv_control_random_vector", "fv_control_random_k_heads"),
     "tv": ("tv_control_shuffled_theta",),
 }
@@ -31,7 +33,8 @@ CONTROLS = {
 def load_rows():
     rows = []
     for path in sorted(glob.glob(str(ROOT / "results" / "grid_*.json"))):
-        # reduced-protocol FV probes and camera-ready extras are analyzed separately
+        # reduced-protocol probes and the extra-control runs use different
+        # protocols, so they are summarized by their own scripts, not here
         if any(tag in Path(path).name for tag in ("_probe_", "_targeted_", "_tvextra", "_crosstask")):
             continue
         try:
@@ -95,11 +98,8 @@ def floor_ceiling_means(rows, model):
 def layer_profiles(rows, models):
     out = []
     for model in models:
-        max_layer = max(
-            (r["layer"] for r in rows if r["model"] == model and r["method"] in METHODS and r["layer"] is not None),
-            default=None,
-        )
-        if not max_layer:
+        depth = N_LAYERS.get(model)
+        if not depth:
             continue
         for method in METHODS:
             by_layer = {}
@@ -115,7 +115,7 @@ def layer_profiles(rows, models):
                     "model": model,
                     "method": method,
                     "layer": layer,
-                    "layer_frac": round(layer / max_layer, 4),
+                    "layer_frac": round(layer / depth, 4),
                     "mean_recovery": sum(values) / len(values),
                     "n_pairs": len(values),
                 })

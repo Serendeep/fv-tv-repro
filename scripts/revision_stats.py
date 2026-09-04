@@ -17,16 +17,13 @@ from fvtv import stats
 
 N_LAYERS = {"gpt-j-6b": 28, "llama-3.1-8b": 32, "gemma-2-9b-it": 42, "llama-3.1-70b": 80}
 
-rows = []
-for path in sorted(glob.glob(str(ROOT / "results" / "grid_*.json"))):
-    try:
-        rows.extend(json.load(open(path)))
-    except json.JSONDecodeError:
-        continue
-dedup = {}
-for r in rows:
-    dedup[(r["model"], r["task"], r["seed"], r["method"], r["layer"])] = r
-rows = list(dedup.values())
+# analyze.load_rows applies the filename filter that keeps reduced-protocol
+# probes and the extra-control runs out of the main grid; loading them here
+# would print per-task numbers that disagree with the paper.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from analyze import load_rows
+
+rows = load_rows()
 models = sorted({r["model"] for r in rows})
 
 sweep = {}

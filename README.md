@@ -51,14 +51,14 @@ The paper's numbers come from the committed `results/` files; no GPU or NDIF acc
 to regenerate them.
 
 ```
-.venv/bin/python scripts/analyze.py
-.venv/bin/python scripts/extra_stats.py
-.venv/bin/python scripts/revision_stats.py
-.venv/bin/python scripts/make_figure.py
-.venv/bin/python scripts/make_extra_figures.py
-.venv/bin/python scripts/panel_revision_stats.py
-.venv/bin/python scripts/tvextra_stats.py
-.venv/bin/python scripts/per_task_tv_table.py
+uv run python scripts/analyze.py
+uv run python scripts/extra_stats.py
+uv run python scripts/revision_stats.py
+uv run python scripts/make_figure.py
+uv run python scripts/make_extra_figures.py
+uv run python scripts/panel_revision_stats.py
+uv run python scripts/tvextra_stats.py
+uv run python scripts/per_task_tv_table.py
 ```
 
 `analyze.py` and `extra_stats.py` write `results/summary.csv` and `results/layer_profiles.csv`.
@@ -84,10 +84,13 @@ sample-size arguments per shard.
 
 ## Provenance note
 
-Result rows record the git SHA at run time. Rows produced before a history cleanup carry SHAs
-that no longer resolve in this repository; the code that produced every committed result is the
-code at the initial release commit or earlier states of the same files. The analysis scripts
-regenerate every number in the paper from the committed results.
+Result rows carry a `git_sha` field recording the working tree that produced them. Those SHAs
+come from the development tree and do not resolve in this repository, so treat the field as a
+run identifier rather than something to check out.
+
+Reproducing the paper does not depend on it. `scripts/analyze.py` and its companions regenerate
+every table and figure from the committed `results/` files, and `RUNS.md` pins the model, tasks,
+seeds, and sample sizes behind each one.
 
 ## Citation
 

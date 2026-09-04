@@ -1,6 +1,6 @@
 #!/usr/bin/env python
-"""Camera-ready task-vector controls, run on an arm's existing (task, seed)
-cells. Each cell's best TV layer, ICL ceiling, and zero-shot floor are read
+"""Task-vector controls beyond label shuffling, run on an arm's existing
+(task, seed) cells. Each cell's best TV layer, ICL ceiling, and zero-shot floor are read
 from results/grid_*.json, so only the new conditions cost remote jobs:
 
   tv_control_cross_task  theta from a same-category donor task's demos,

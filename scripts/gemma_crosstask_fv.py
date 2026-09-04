@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Camera-ready: Todd et al.-style cross-task head selection on Gemma-2-9b-it.
+"""Todd et al.-style cross-task head selection on Gemma-2-9b-it.
 
 The main grid selects top-10 heads per task. Todd et al. average AIE across
 tasks, pick one head set per model, and scale k with model size. This script

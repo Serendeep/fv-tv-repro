@@ -31,12 +31,12 @@ uv run python scripts/gemma_diagnostics.py antonym
 uv run python scripts/gemma_diagnostics.py country-capital
 uv run python scripts/gemma_alpha.py
 
-# --- Camera-ready additions (Sept 2026, in response to reviews) ---
-# Llama-3.1-8B FV: full protocol on five more tasks (moves C1.1 from insufficient data to pass)
+# --- Follow-up runs ---
+# Llama-3.1-8B FV: full protocol on five more tasks, taking the arm to 8 tasks / 24 pairs
 uv run python scripts/run_grid.py --model llama-3.1-8b --remote --tasks country-capital,english-french,next_item,present-past,synonym --seeds 0,1,2 --n-eval 25 --n-aie-trials 10 --sweep-stride 2 --aie-max-rows 32 --out results/grid_llama-3.1-8b_shard2.json
-# Gemma-2 cross-task head selection (Todd protocol, k in {10,20,40})
+# Gemma-2 cross-task head selection, Todd et al.'s protocol at k in {10,20,40}
 uv run python scripts/gemma_crosstask_fv.py
-# Task-vector controls: cross-task donor, arrow-template, additive patching
+# Task-vector controls beyond label shuffling: cross-task donor, arrow template, additive patching
 uv run python scripts/tv_controls_extra.py --model gpt-j-6b --remote
 uv run python scripts/tv_controls_extra.py --model llama-3.1-8b --remote
 uv run python scripts/tv_controls_extra.py --model llama-3.1-70b --remote

@@ -27,8 +27,8 @@ from nnsight import LanguageModel
 
 from fvtv import controls, eval_icl, fv, stats, tasks, tv
 
-# model key -> (hf id, default n_layers unused here (read from config at load
-# time), role). GPT-OSS-120B removed (not currently hosted).
+# model key -> hf id + the role that arm plays in the study. Layer and head
+# geometry is read from the model config at load time, not stored here.
 MODEL_REGISTRY = {
     "gpt2":               {"hf_id": "openai-community/gpt2",         "role": "pipeline-dev / smoke test"},
     "gpt-j-6b":           {"hf_id": "EleutherAI/gpt-j-6b",            "role": "exact-replication arm"},
@@ -36,10 +36,10 @@ MODEL_REGISTRY = {
     "gemma-2-9b-it":      {"hf_id": "google/gemma-2-9b-it",           "role": "family + instruct axis"},
     "llama-3.1-70b":      {"hf_id": "meta-llama/Llama-3.1-70B",       "role": "scale axis"},
     "llama-3.3-70b-it":   {"hf_id": "meta-llama/Llama-3.3-70B-Instruct", "role": "optional extra"},
-    "gemma-2-9b":         {"hf_id": "google/gemma-2-9b",              "role": "camera-ready: base-model control for the gemma-2-9b-it FV null"},
-    "gemma-2-2b":         {"hf_id": "google/gemma-2-2b",              "role": "camera-ready: cheap second Gemma-2 checkpoint"},
-    "qwen2.5-0.5b":       {"hf_id": "Qwen/Qwen2.5-0.5B",              "role": "camera-ready: third model family (small)"},
-    "llama-3.2-3b":       {"hf_id": "meta-llama/Llama-3.2-3B",        "role": "camera-ready: small Llama-3 scale point"},
+    "gemma-2-9b":         {"hf_id": "google/gemma-2-9b",              "role": "base-model control for the gemma-2-9b-it FV null"},
+    "gemma-2-2b":         {"hf_id": "google/gemma-2-2b",              "role": "cheap second Gemma-2 checkpoint"},
+    "qwen2.5-0.5b":       {"hf_id": "Qwen/Qwen2.5-0.5B",              "role": "third model family (small)"},
+    "llama-3.2-3b":       {"hf_id": "meta-llama/Llama-3.2-3B",        "role": "small Llama-3 scale point"},
 }
 
 

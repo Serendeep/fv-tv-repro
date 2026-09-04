@@ -104,7 +104,7 @@ def effect_summary():
     ax.set_yticks(y, labels, fontsize=6)
     ax.set_xlabel("recovery ratio", fontsize=7)
     ax.tick_params(axis="x", labelsize=6, length=2)
-    ax.set_xlim(-0.08, 1.08)
+    ax.set_xlim(-0.08, 1.12)
     ax.grid(axis="x", color="0.93", lw=0.5, zorder=0)
     ax.set_axisbelow(True)
     for s in ("top", "right", "left"):

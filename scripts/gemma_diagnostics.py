@@ -9,7 +9,7 @@ D4 prediction flips: clean vs injected argmax ids, all three conditions.
 
 Checkpoints per stage into results/gemma_diagnostics.json.
 
-Usage: .venv/bin/python scripts/gemma_diagnostics.py
+Usage: uv run python scripts/gemma_diagnostics.py
 """
 import json
 import sys

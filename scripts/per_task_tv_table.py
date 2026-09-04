@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """Print the per-task TV recovery table (Appendix) as LaTeX from results/grid_*.json.
 
-Usage: .venv/bin/python scripts/per_task_tv_table.py
+Usage: uv run python scripts/per_task_tv_table.py
 """
 import sys
 from collections import defaultdict
