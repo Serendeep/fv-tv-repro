@@ -274,7 +274,7 @@ All model access in this study ran through NDIF remote execution on shared, no-c
 \section{Deviation Log}
 \label{sec:deviations}
 
-Deviations from the original protocols, with motivation. The repository log is the full record.
+Deviations from the original protocols, with motivation.
 
 \paragraph{Protocol.} The plan was 25-item splits, seeds 0--2, stride-2 sweeps, and 10 AIE trials. Table~\ref{tab:protocol} reports what each arm ran: GPT-J fell to 15-item splits, two seeds, and stride-4; Gemma-2 to 5 AIE trials and 12 of 15 cells; 70B to stride-3. All trace to roughly 18 seconds per remote job on shared deployments that failed unpredictably. Demonstrations are sampled once per (task, seed) and reused across the split, where the original FV pipeline resamples per query; mean head activations and the AIE search do resample per trial.
 
