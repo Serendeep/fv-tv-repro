@@ -31,11 +31,12 @@ for ax, model in zip(axes.flat, ORDER):
     for method, color, ls in (("tv", TV, "-"), ("fv", FV, "--")):
         pts = sorted(data.get((model, method), []))
         if pts:
-            ax.plot(*zip(*pts), color=color, ls=ls, lw=1.4,
+            ax.plot(*zip(*pts), color=color, ls=ls, lw=1.4, zorder=3,
                     label={"tv": "TV", "fv": "FV"}[method])
     ax.set_title(TITLES[model], fontsize=7, pad=2)
     ax.axhline(0, color="0.85", lw=0.6, zorder=0)
     ax.grid(axis="y", color="0.92", lw=0.5, zorder=0)
+    ax.set_axisbelow(True)
     ax.tick_params(labelsize=6, length=2)
     for s in ("top", "right"):
         ax.spines[s].set_visible(False)

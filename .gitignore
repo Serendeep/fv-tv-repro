@@ -2,3 +2,10 @@
 __pycache__/
 *.pyc
 .DS_Store
+logs/
+paper/main.aux
+paper/main.log
+paper/main.out
+paper/main.blg
+paper/main.fls
+paper/main.fdb_latexmk

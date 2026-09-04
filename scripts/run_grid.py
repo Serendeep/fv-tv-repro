@@ -36,6 +36,10 @@ MODEL_REGISTRY = {
     "gemma-2-9b-it":      {"hf_id": "google/gemma-2-9b-it",           "role": "family + instruct axis"},
     "llama-3.1-70b":      {"hf_id": "meta-llama/Llama-3.1-70B",       "role": "scale axis"},
     "llama-3.3-70b-it":   {"hf_id": "meta-llama/Llama-3.3-70B-Instruct", "role": "optional extra"},
+    "gemma-2-9b":         {"hf_id": "google/gemma-2-9b",              "role": "camera-ready: base-model control for the gemma-2-9b-it FV null"},
+    "gemma-2-2b":         {"hf_id": "google/gemma-2-2b",              "role": "camera-ready: cheap second Gemma-2 checkpoint"},
+    "qwen2.5-0.5b":       {"hf_id": "Qwen/Qwen2.5-0.5B",              "role": "camera-ready: third model family (small)"},
+    "llama-3.2-3b":       {"hf_id": "meta-llama/Llama-3.2-3B",        "role": "camera-ready: small Llama-3 scale point"},
 }
 
 

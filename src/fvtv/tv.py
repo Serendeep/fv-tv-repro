@@ -26,14 +26,15 @@ def pick_dummy_query(train_pool, demos, seed):
     return pool[int(rng.integers(0, len(pool)))]["input"]
 
 
-def extract_theta_all_layers(model, demos, dummy_query, remote=False):
+def extract_theta_all_layers(model, demos, dummy_query, remote=False, prompt=None):
     """{layer: (hidden,)} residual-stream vector at each layer's output, last
     token, from a single forward pass of a 10-shot prompt ending in the dummy
-    query (cheaper than one trace per layer)."""
+    query (cheaper than one trace per layer). `prompt` overrides the Q:/A:
+    prompt built from demos (template-swap control)."""
     cfg = arch_config(model)
     blocks = _blocks(model, cfg)
     tokenizer = model.tokenizer
-    prompt = tasks.build_icl_prompt(demos, dummy_query)
+    prompt = prompt or tasks.build_icl_prompt(demos, dummy_query)
     enc = encode_batch(tokenizer, [prompt])
     blks, is_tuple = [blocks[L] for L in range(cfg["n_layers"])], cfg["block_out_tuple"]
 
@@ -52,9 +53,9 @@ def extract_theta(model, demos, dummy_query, layer, remote=False):
     return extract_theta_all_layers(model, demos, dummy_query, remote=remote)[layer]
 
 
-def patch_theta(model, prompts, theta, layer, batch_size=16, remote=False):
-    """Replace (not add) the residual stream at `layer`, last token, with
-    theta, on (typically zero-shot) prompts. Returns argmax token id/prompt."""
+def patch_theta(model, prompts, theta, layer, batch_size=16, remote=False, additive=False):
+    """Replace (default) or add (`additive=True`) theta at `layer`, last
+    token, on (typically zero-shot) prompts. Returns argmax token id/prompt."""
     cfg = arch_config(model)
     blocks = _blocks(model, cfg)
     tokenizer = model.tokenizer
@@ -66,7 +67,10 @@ def patch_theta(model, prompts, theta, layer, batch_size=16, remote=False):
         def _run():
             with torch.no_grad(), model.trace(enc, remote=remote):
                 h = blk.output[0] if is_tuple else blk.output
-                h[:, -1, :] = theta.to(h)
+                if additive:
+                    h[:, -1, :] = h[:, -1, :] + theta.to(h)
+                else:
+                    h[:, -1, :] = theta.to(h)
                 logits_last = model.lm_head.output[:, -1, :].save()
             return logits_last
 

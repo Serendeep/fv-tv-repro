@@ -31,6 +31,9 @@ CONTROLS = {
 def load_rows():
     rows = []
     for path in sorted(glob.glob(str(ROOT / "results" / "grid_*.json"))):
+        # reduced-protocol FV probes and camera-ready extras are analyzed separately
+        if any(tag in Path(path).name for tag in ("_probe_", "_targeted_", "_tvextra", "_crosstask")):
+            continue
         try:
             with open(path) as f:
                 data = json.load(f)
