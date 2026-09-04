@@ -44,7 +44,7 @@ We ask a plain question: do these two claims hold on the same tasks, under the s
 
 One scope note up front. Our tasks are the 16 word-pair tasks from the FV repository, with short, mostly single-token answers. That is the regime both original papers evaluated, and it is the only regime we test. When we say task vectors generalize, we mean across model families on this suite, not across kinds of in-context learning.
 
-Negative and qualified results are results. Our framing follows the reproducibility-report conventions of the ML Reproducibility Challenge \citep{pineau2021improving}: claims are enumerated, each gets its own verdict, and every deviation from the original protocols is logged (Appendix~\ref{sec:deviations}).
+Negative and qualified results are results. Our framing follows the reproducibility-report conventions of the ML Reproducibility Challenge \citep{pineau2021improving}: claims are enumerated, each gets its own verdict, and every deviation from the original recipes and from our own intended protocol is logged (Appendix~\ref{sec:deviations}).
 
 \section{Background and Claims Under Test}
 \label{sec:claims}
@@ -244,7 +244,7 @@ What we can say is procedural. Porting a coordinate-specific intervention to a n
 
 \subsection{Deviations Summary}
 
-Every judgment call and deviation from the original protocols is logged: the per-arm protocol is Table~\ref{tab:protocol}, and Appendix~\ref{sec:deviations} itemizes the rest, from prompt-format harmonization to the remote-execution constraints that shaped batching.
+Every judgment call is logged. Section~\ref{sec:claims} states the two original recipes, Table~\ref{tab:protocol} gives the sampling protocol each arm actually ran, and Appendix~\ref{sec:deviations} itemizes where we departed from either, from prompt-format harmonization to the remote-execution constraints that shaped batching.
 
 \section{Conclusion}
 \label{sec:conclusion}
@@ -274,9 +274,9 @@ All model access in this study ran through NDIF remote execution on shared, no-c
 \section{Deviation Log}
 \label{sec:deviations}
 
-Deviations from the original protocols, with motivation.
+Deviations are measured against two baselines. The first is the recipe of the paper being reproduced, Todd et al.\ for FVs and Hendel et al.\ for TVs, and those deviations are under \emph{Method fidelity} below. The second is the uniform sampling protocol we fixed for ourselves before running anything, and those are under \emph{Protocol}.
 
-\paragraph{Protocol.} The plan was 25-item splits, seeds 0--2, stride-2 sweeps, and 10 AIE trials. Table~\ref{tab:protocol} reports what each arm ran: GPT-J fell to 15-item splits, two seeds, and stride-4; Gemma-2 to 5 AIE trials and 12 of 15 cells; 70B to stride-3. All trace to roughly 18 seconds per remote job on shared deployments that failed unpredictably. Demonstrations are sampled once per (task, seed) and reused across the split, where the original FV pipeline resamples per query; mean head activations and the AIE search do resample per trial.
+\paragraph{Protocol.} We intended 25-item evaluation splits, seeds 0--2, stride-2 sweeps, and 10 AIE trials on every arm. Table~\ref{tab:protocol} reports what each arm ran: GPT-J fell to 15-item splits, two seeds, and stride-4; Gemma-2 to 5 AIE trials and 12 of 15 cells; 70B to stride-3. All trace to roughly 18 seconds per remote job on shared deployments that failed unpredictably. Demonstrations are sampled once per (task, seed) and reused across the split, where the original FV pipeline resamples per query; mean head activations and the AIE search do resample per trial.
 
 \paragraph{Method fidelity.} Head selection in the main grid is per task (top-10 by that task's AIE) rather than Todd et al.'s cross-task average with size-scaled $k$; the Gemma-2 cross-task run applies the original selection. The AIE query pool overlaps the evaluation split. The shuffled-$\theta$ control uses one label permutation per cell at the real vector's best layer. Prompts are harmonized to \texttt{Q:/A:}, where Hendel et al.\ used an arrow separator. We did not contact either paper's authors.
 
