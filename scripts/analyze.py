@@ -24,7 +24,7 @@ N_LAYERS = {"gpt-j-6b": 28, "llama-3.1-8b": 32, "gemma-2-9b-it": 42, "llama-3.1-
 CONTROLS = {
     # FV has two matched controls: does the vector's content matter, and does
     # head selection matter. Pooled into one sample so summary.csv keeps one
-    # control_mean/cohens_d per row; the stdout table still shows them apart.
+    # control_mean/cohens_d per row. Paired differences average controls within cell.
     "fv": ("fv_control_random_vector", "fv_control_random_k_heads"),
     "tv": ("tv_control_shuffled_theta",),
 }
@@ -122,16 +122,13 @@ def layer_profiles(rows, models):
     return out
 
 
-def verdict(cohens_d, mean, control_mean, n_tasks):
-    if n_tasks < 5:
+def verdict(cohens_d, paired_lo, n_tasks):
+    """Paper grading: positive paired interval plus standardized effect size."""
+    if n_tasks < 5 or not is_num(cohens_d) or not is_num(paired_lo):
         return "INSUFFICIENT DATA"
-    if math.isnan(cohens_d) or math.isnan(mean) or math.isnan(control_mean):
-        return "INSUFFICIENT DATA"
-    if mean > control_mean and cohens_d >= 0.8:
-        return "REPLICATES"
-    if mean > control_mean and cohens_d >= 0.2:
-        return "WEAK EFFECT"
-    return "NO EFFECT"
+    if paired_lo <= 0 or cohens_d < 0.5:
+        return "FAIL"
+    return "PASS" if cohens_d >= 0.8 else "WEAK PASS"
 
 
 def main():
@@ -171,7 +168,16 @@ def main():
                 "n_pairs": len(method_values), "n_tasks": len(method_by_task), "control_mean": control_mean, "cohens_d": d,
             })
 
-            v = verdict(d, mean, control_mean, len(method_by_task))
+            # Average the two FV controls within each cell for the paired check.
+            controls_by_pair = {}
+            for (task, seed, _control), value in control_by_key.items():
+                controls_by_pair.setdefault((task, seed), []).append(value)
+            paired_by_task = {}
+            for pair, value in method_by_pair.items():
+                matched = controls_by_pair[pair]
+                paired_by_task.setdefault(pair[0], []).append(value - sum(matched) / len(matched))
+            _, paired_lo, _ = stats.cluster_bootstrap_ci(paired_by_task)
+            v = verdict(d, paired_lo, len(method_by_task))
             print_lines.append(
                 f"{method:4} {mean:7.3f} {lo:7.3f} {hi:7.3f} {len(method_values):4d}  "
                 f"{control_mean:7.3f} {net:7.3f} {d:6.2f}  {v}"
@@ -181,13 +187,13 @@ def main():
 
     summary_path = ROOT / "results" / "summary.csv"
     with open(summary_path, "w", newline="") as f:
-        w = csv.DictWriter(f, fieldnames=["model", "method", "mean", "ci_lo", "ci_hi", "n_pairs", "n_tasks", "control_mean", "cohens_d"])
+        w = csv.DictWriter(f, lineterminator='\n', fieldnames=["model", "method", "mean", "ci_lo", "ci_hi", "n_pairs", "n_tasks", "control_mean", "cohens_d"])
         w.writeheader()
         w.writerows(summary_rows)
 
     profiles_path = ROOT / "results" / "layer_profiles.csv"
     with open(profiles_path, "w", newline="") as f:
-        w = csv.DictWriter(f, fieldnames=["model", "method", "layer", "layer_frac", "mean_recovery", "n_pairs"])
+        w = csv.DictWriter(f, lineterminator='\n', fieldnames=["model", "method", "layer", "layer_frac", "mean_recovery", "n_pairs"])
         w.writeheader()
         w.writerows(profiles)
 

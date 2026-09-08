@@ -9,8 +9,6 @@ Computes:
 from __future__ import annotations
 
 import csv
-import glob
-import json
 import math
 import sys
 from collections import defaultdict
@@ -19,6 +17,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "src"))
 from fvtv import stats
+from analyze import load_rows
 
 METHODS = ("fv", "tv")
 CONTROLS = {
@@ -44,18 +43,6 @@ GAP_MIN = 0.2
 def is_num(x):
     return x is not None and not (isinstance(x, float) and math.isnan(x))
 
-
-def load_rows():
-    rows = []
-    for path in sorted(glob.glob(str(ROOT / "results" / "grid_*.json"))):
-        try:
-            rows.extend(json.load(open(path)))
-        except json.JSONDecodeError:
-            continue
-    dedup = {}
-    for r in rows:
-        dedup[(r["model"], r["task"], r["seed"], r["method"], r["layer"])] = r
-    return list(dedup.values())
 
 
 def best_method_by_pair(rows, model, method):
@@ -136,10 +123,10 @@ def main():
             })
 
     with (outdir / "paired_differences.csv").open("w", newline="") as f:
-        w = csv.DictWriter(f, fieldnames=list(paired_rows[0]))
+        w = csv.DictWriter(f, lineterminator='\n', fieldnames=list(paired_rows[0]))
         w.writeheader(); w.writerows(paired_rows)
     with (outdir / "gap_sensitivity.csv").open("w", newline="") as f:
-        w = csv.DictWriter(f, fieldnames=list(sensitivity_rows[0]))
+        w = csv.DictWriter(f, lineterminator='\n', fieldnames=list(sensitivity_rows[0]))
         w.writeheader(); w.writerows(sensitivity_rows)
 
     # Appendix task-subset table.
@@ -162,7 +149,7 @@ def main():
                 "tasks": ", ".join(tasks),
             })
     with (outdir / "task_subsets.csv").open("w", newline="") as f:
-        w = csv.DictWriter(f, fieldnames=list(task_rows[0]))
+        w = csv.DictWriter(f, lineterminator='\n', fieldnames=list(task_rows[0]))
         w.writeheader(); w.writerows(task_rows)
 
     print("== paired method-control differences ==")

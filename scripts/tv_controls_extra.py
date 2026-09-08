@@ -4,10 +4,10 @@
 from results/grid_*.json, so only the new conditions cost remote jobs:
 
   tv_control_cross_task  theta from a same-category donor task's demos,
-                         patched at this task's best layer (format, no rule)
+                         patched at this task's best layer (different task, shared format)
   tv_control_template    theta from this task's own demos in an arrow
                          template, patched into the Q:/A: zero-shot prompt
-                         (rule, other format)
+                         (same labeled pairs, different format)
   tv_additive            theta added to the residual instead of replacing
                          it, swept over the arm's layers
 

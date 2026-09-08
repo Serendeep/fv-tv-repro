@@ -1,0 +1,13 @@
+{
+  "config": {
+    "model": "gemma-2-9b",
+    "method": "fv",
+    "tasks": "antonym,country-capital",
+    "seeds": "100,101,102"
+  },
+  "source_sha256": "5274d60b158da5177ff0952c2aa8505ff85eb9caa8add0371bddf05dbe67037e",
+  "data_sha256": {
+    "antonym": "ba66e8e399944b557251b11a37b11f9ba7a50f0a57286f7021a8a7b26b469e8d",
+    "country-capital": "5748cbfb789c2d671f8a88bf8eaa8a800ead77299e34e1d0cafae11b0409782b"
+  }
+}

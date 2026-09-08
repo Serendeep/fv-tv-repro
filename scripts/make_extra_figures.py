@@ -17,6 +17,8 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
+plt.rcParams.update({"pdf.fonttype": 42, "ps.fonttype": 42})
+
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "src"))
 sys.path.insert(0, str(ROOT / "scripts"))
@@ -119,7 +121,7 @@ def tv_controls_by_task():
     """Per model and task (seeds averaged), real TV recovery on x against each
     ablated variant on y: label-shuffled, cross-task donor, template swap.
     Points on the diagonal mean the variant is as good as the real vector;
-    points on the floor mean it carries nothing. Main-grid cells only."""
+    zero recovery means no improvement over the zero-shot baseline. Main-grid cells only."""
     grid = load_rows()
     models = ["gpt-j-6b", "llama-3.1-8b", "gemma-2-9b-it", "llama-3.1-70b"]
     real, series = {}, {"shuffled": {}, "cross-task": {}, "template": {}}

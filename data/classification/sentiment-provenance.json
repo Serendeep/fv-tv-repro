@@ -1,0 +1,6 @@
+{
+  "url": "https://raw.githubusercontent.com/ericwtodd/function_vectors/main/dataset_files/abstractive/sentiment.json",
+  "retrieved_at": "2026-09-06T19:01:14.114789+00:00",
+  "sha256": "e63f927bf5920c3acf01dcbdc628bc07118731a77916de4bf0f6e3e443f75413",
+  "attribution": "SST-2-derived sentiment data distributed by Todd et al., Function Vectors in Large Language Models, Appendix E. Preserve original dataset attribution when releasing."
+}

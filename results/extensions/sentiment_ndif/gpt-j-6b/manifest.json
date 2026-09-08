@@ -1,0 +1,30 @@
+{
+  "model": "gpt-j-6b",
+  "seeds": [
+    200,
+    201,
+    202
+  ],
+  "mappings": {
+    "natural": {
+      "positive": "positive",
+      "negative": "negative"
+    },
+    "ab": {
+      "positive": "A",
+      "negative": "B"
+    },
+    "ba": {
+      "positive": "B",
+      "negative": "A"
+    }
+  },
+  "split_seed": 20260906,
+  "dev_per_class": 20,
+  "test_per_class": 40,
+  "demos_per_class": 5,
+  "batch_size": 8,
+  "source_sha256": "701908e36be5a8aa9faf3160f720f48c4f8aefdc9d396d6df909a00e333cc7ba",
+  "data_sha256": "e63f927bf5920c3acf01dcbdc628bc07118731a77916de4bf0f6e3e443f75413",
+  "analysis": "Unrestricted top-1 accuracy; invalid-label rate; independently dev-selected controls; lowest-layer tie break. Average seeds and then arbitrary mappings within each test input. Paired stratified input bootstrap, 10000 draws, RNG 20260906. Report both mappings separately too."
+}

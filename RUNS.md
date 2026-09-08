@@ -48,3 +48,63 @@ uv run python scripts/per_task_tv_table.py
 Coverage per arm is smaller than the task lists above where deployment outages ended a run
 early. Committed result rows carry per-row `n_eval`, `seed`, and `git_sha`; read those fields
 rather than assuming every shard completed its full task list.
+
+## Held-out follow-up
+
+The completed follow-up contains 96 cells: two models, two methods, eight tasks,
+and seeds 100–102.
+To start fresh runs with the current implementation:
+
+```sh
+for model in gpt-j-6b llama-3.1-8b; do
+  for method in tv fv; do
+    uv run python scripts/run_heldout.py --model "$model" --method "$method" \
+      --seeds 100,101,102 --out "results/heldout_rerun/$model/$method"
+  done
+done
+```
+
+The runner uses NDIF. Do not point a new run at the archived outputs: source hashes
+are checked on resume. Each saved arm includes `manifest.json`,
+`source_snapshot.json`, and `partitions.json`; each completed cell includes token
+predictions, frozen selections, and vector artifacts. The GPT-J FV arm completed
+with memory-recovery code recorded in its snapshot, so the current source alone
+does not reproduce that execution exactly.
+
+Verify the saved results without model access:
+
+```sh
+uv run python scripts/analyze_heldout.py results/heldout
+uv run python scripts/heldout_paper_tables.py --check
+```
+
+`analyze_heldout.py` also writes a local `STATUS.md`, which Git ignores. Operational
+logs and process records are not part of the public release.
+
+## Gemma and sentiment extensions
+
+`results/extensions/` contains 96 completed cells, separate from the
+96-cell NDIF held-out evaluation. The Gemma TV notebook runs 48 word-pair cells
+and 18 sentiment cells. The FV notebook runs 12 cells on antonym and
+country-capital. GPT-J and Llama contribute the other 18 sentiment cells through
+`scripts/run_sentiment_mapping.py`; their exact source is in each arm's snapshot.
+
+The frozen notebooks are `notebooks/gemma_matched_tv.ipynb` and
+`notebooks/gemma_matched_fv.ipynb`. They contain the source bundle used for the
+reported runs. On Kaggle, enable two T4 GPUs and internet access, accept the
+checkpoint's access terms, and attach an authorized Hugging Face token as the
+`HF_TOKEN` secret. Both checkpoints run in FP16 without quantization or CPU/disk
+offloading. Execution records pin revisions and package versions.
+
+These notebooks preserve a historical September 8, 2026 deadline. For a new run,
+copy the notebook, adjust its deadline, and use fresh output paths. Preserve the
+archived notebooks and results. The source and protocol are also unpacked under
+`results/extensions/provenance/` for inspection.
+
+Verify all extension tables without model access:
+
+```sh
+uv run python scripts/extension_paper_tables.py --check
+```
+
+Omit `--check` to regenerate the five tables and extension summary.

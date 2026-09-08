@@ -9,3 +9,28 @@ paper/main.out
 paper/main.blg
 paper/main.fls
 paper/main.fdb_latexmk
+
+# Local credentials and operational files
+.env
+.env.*
+!.env.example
+*.log
+*.pid
+results/**/processes.json
+results/**/STATUS.md
+results/**/EXECUTION.md
+
+# TeX build products (keep the manuscript PDF and bibliography)
+paper/*.aux
+paper/*.blg
+paper/*.out
+paper/*.fls
+paper/*.fdb_latexmk
+paper/*.synctex.gz
+
+# Local editor and notebook state
+.ipynb_checkpoints/
+.pytest_cache/
+.ruff_cache/
+*.swp
+*.swo

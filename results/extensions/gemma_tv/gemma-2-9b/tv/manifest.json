@@ -1,0 +1,19 @@
+{
+  "config": {
+    "model": "gemma-2-9b",
+    "method": "tv",
+    "tasks": "antonym,country-capital,english-french,present-past,person-occupation,singular-plural,synonym,next_item",
+    "seeds": "100,101,102"
+  },
+  "source_sha256": "c603785793b15176ccfa8699554fcd78f5e7f34bdf427e348823caa30c4855f6",
+  "data_sha256": {
+    "antonym": "ba66e8e399944b557251b11a37b11f9ba7a50f0a57286f7021a8a7b26b469e8d",
+    "country-capital": "5748cbfb789c2d671f8a88bf8eaa8a800ead77299e34e1d0cafae11b0409782b",
+    "english-french": "766fa28cc696f37b1009f36372372797be03444045c58bc554759f3e177638cc",
+    "present-past": "bd6f7d484a967646aa5854740c70803568225f47a5630e1555c39e827ba9c78b",
+    "person-occupation": "2c2fac0d4ba5a0aec033005c92ea170c6254f1d30a9b063c9ae5be0ff5d093d7",
+    "singular-plural": "beac51d02481a63115f0f7879e0dfc8d70244aeaea4d0a8d5193a5b2dfc07b9b",
+    "synonym": "dc0c79f94b70999236ec962465b21ab416074ea2969a980eafa85e9cb2702685",
+    "next_item": "fbef21cf40e1c6f4b12100812b09daa8e079f79b84ea3fea0e99637ea70f8873"
+  }
+}

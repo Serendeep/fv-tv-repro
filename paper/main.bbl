@@ -1,4 +1,4 @@
-\begin{thebibliography}{16}
+\begin{thebibliography}{21}
 \providecommand{\natexlab}[1]{#1}
 
 \bibitem[{Bakalova et~al.(2025)Bakalova, Veitsman, Huang, and
@@ -30,6 +30,18 @@ Jaden Fiotto-Kaufman, Alexander~R. Loftus, Eric Todd, Jannik Brinkmann, Koyena
   Democratizing access to open-weight foundation model internals}.
 \newblock In \emph{International Conference on Learning Representations
   (ICLR)}.
+
+\bibitem[{{Gemma Team}(2024)}]{gemmateam2024gemma2}
+{Gemma Team}. 2024.
+\newblock \href {https://arxiv.org/abs/2408.00118} {{Gemma 2}: Improving open
+  language models at a practical size}.
+\newblock \emph{arXiv preprint arXiv:2408.00118}.
+
+\bibitem[{Grattafiori et~al.(2024)}]{grattafiori2024llama}
+Aaron Grattafiori et~al. 2024.
+\newblock \href {https://arxiv.org/abs/2407.21783} {The {Llama 3} herd of
+  models}.
+\newblock \emph{arXiv preprint arXiv:2407.21783}.
 
 \bibitem[{Hendel et~al.(2023)Hendel, Geva, and Globerson}]{hendel2023incontext}
 Roee Hendel, Mor Geva, and Amir Globerson. 2023.
@@ -66,10 +78,10 @@ Sheng Liu, Haotian Ye, Lei Xing, and James~Y. Zou. 2024.
   Zettlemoyer}]{min2022rethinking}
 Sewon Min, Xinxi Lyu, Ari Holtzman, Mikel Artetxe, Mike Lewis, Hannaneh
   Hajishirzi, and Luke Zettlemoyer. 2022.
-\newblock \href {https://arxiv.org/abs/2202.12837} {Rethinking the role of
-  demonstrations: What makes in-context learning work?}
+\newblock \href {https://doi.org/10.18653/v1/2022.emnlp-main.759} {Rethinking
+  the role of demonstrations: What makes in-context learning work?}
 \newblock In \emph{Proceedings of the 2022 Conference on Empirical Methods in
-  Natural Language Processing (EMNLP)}.
+  Natural Language Processing (EMNLP)}, pages 11048--11064.
 
 \bibitem[{Pan et~al.(2023)Pan, Gao, Chen, and Chen}]{pan2023what}
 Jane Pan, Tianyu Gao, Howard Chen, and Danqi Chen. 2023.
@@ -99,6 +111,15 @@ Daniel Tan, David Chanin, Aengus Lynch, Brooks Paige, Dimitrios Kanoulas,
 \newblock In \emph{Advances in Neural Information Processing Systems
   (NeurIPS)}, volume~37.
 
+\bibitem[{Tikhonov et~al.(2026)Tikhonov, Oseledets, and
+  Tutubalina}]{tikhonov2026one}
+Pavel Tikhonov, Ivan Oseledets, and Elena Tutubalina. 2026.
+\newblock \href {https://doi.org/10.18653/v1/2026.acl-srw.127} {One task vector
+  is not enough: A large-scale study for in-context learning}.
+\newblock In \emph{Proceedings of the 64th Annual Meeting of the Association
+  for Computational Linguistics (Volume 4: Student Research Workshop)}, pages
+  1451--1463. Association for Computational Linguistics.
+
 \bibitem[{Todd et~al.(2024)Todd, Li, Sharma, Mueller, Wallace, and
   Bau}]{todd2024function}
 Eric Todd, Millicent~L. Li, Arnab~Sen Sharma, Aaron Mueller, Byron~C. Wallace,
@@ -108,6 +129,11 @@ Eric Todd, Millicent~L. Li, Arnab~Sen Sharma, Aaron Mueller, Byron~C. Wallace,
 \newblock In \emph{International Conference on Learning Representations
   (ICLR)}.
 
+\bibitem[{Wang and Komatsuzaki(2021)}]{wang2021gptj}
+Ben Wang and Aran Komatsuzaki. 2021.
+\newblock \href {https://github.com/kingoflolz/mesh-transformer-jax}
+  {{GPT-J-6B}: A 6 billion parameter autoregressive language model}.
+
 \bibitem[{Wei et~al.(2023)Wei, Wei, Tay, Tran, Webson, Lu, Chen, Liu, Huang,
   Zhou, and Ma}]{wei2023larger}
 Jerry Wei, Jason Wei, Yi~Tay, Dustin Tran, Albert Webson, Yifeng Lu, Xinyun
@@ -116,11 +142,19 @@ Jerry Wei, Jason Wei, Yi~Tay, Dustin Tran, Albert Webson, Yifeng Lu, Xinyun
   in-context learning differently}.
 \newblock \emph{arXiv preprint arXiv:2303.03846}.
 
+\bibitem[{Yang et~al.(2025)Yang, Cho, Zhong, and Inoue}]{yang2025unifying}
+Haolin Yang, Hakaze Cho, Yiqiao Zhong, and Naoya Inoue. 2025.
+\newblock \href {https://doi.org/10.52202/085713-0732} {Unifying attention
+  heads and task vectors via hidden state geometry in in-context learning}.
+\newblock In \emph{Advances in Neural Information Processing Systems
+  (NeurIPS)}, volume~38.
+
 \bibitem[{Yin and Steinhardt(2025)}]{yin2025which}
 Kayo Yin and Jacob Steinhardt. 2025.
 \newblock \href {https://arxiv.org/abs/2502.14010} {Which attention heads
   matter for in-context learning?}
-\newblock In \emph{International Conference on Machine Learning (ICML)}.
+\newblock In \emph{International Conference on Machine Learning (ICML)}, volume
+  267, pages 72428--72461. PMLR.
 
 \bibitem[{Yoo et~al.(2022)Yoo, Kim, Kim, Cho, Jo, Lee, Lee, and
   Kim}]{yoo2022groundtruth}

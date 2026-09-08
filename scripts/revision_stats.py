@@ -68,7 +68,7 @@ print("\n== CV (layer picked on seed 0, evaluated on later seeds), clustered =="
 for m in models:
     for method in ("fv", "tv"):
         by_task = defaultdict(list)
-        for t in {k[1] for k in sweep if k[0] == m and k[3] == method}:
+        for t in sorted({k[1] for k in sweep if k[0] == m and k[3] == method}):
             s0 = sweep.get((m, t, 0, method))
             if not s0:
                 continue

@@ -1,0 +1,71 @@
+{
+  "started": 1788741655.8977716,
+  "dtype": "float16",
+  "batch_size": 4,
+  "revisions": {
+    "google/gemma-2-9b": "33c193028431c2fde6c6e51f29e6f17b60cbfac6",
+    "google/gemma-2-9b-it": "11c9b309abf73637e4b6f9a3fa1e92e615547819"
+  },
+  "deadline": 1788783055.8640559,
+  "versions": {
+    "torch": "2.10.0+cu128",
+    "transformers": "5.0.0",
+    "accelerate": "1.13.0"
+  },
+  "source_hashes": {
+    "src/fvtv/controls.py": "a9c6533f791489782f1e3f0e2cba3721c3019db2d2f1f851435746bd09ffd96b",
+    "src/fvtv/tasks.py": "21849be6e7431b9d2558533089c343a6d168d7c229a0ea2f435db87abfcbdbad",
+    "src/fvtv/eval_icl.py": "6c7009f269ce68d0a8338f24276021ea72cd34c180b9c961290c40f6446f68b0",
+    "src/fvtv/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/fvtv/fv.py": "4bb0ba453f4c4cce1ed327f4830ce7d349e446522c99b7238a658b0d28e514c8",
+    "src/fvtv/stats.py": "712bc614917a9bb5933a26701199234ef0a4ac4ff98cde8c8a3744e9ff219334",
+    "src/fvtv/tv.py": "a2223b59baa4a8cd87c036ec1e949dcf843feb5df3751668a29bfd69d6842682",
+    "src/fvtv/heldout.py": "dae5b7220df5d54cfa312e956d62690c129ccfc753115ca569a45e606d33c7dd",
+    "scripts/run_heldout.py": "7709785a81412284593e8280b2af48b9c1a7dea02e1a9cebab3966f9f402dc51",
+    "scripts/run_sentiment_mapping.py": "0d17e96c86ce0a11a4ae60a18f3f201a34788fb3d48794c3a76a57c69a0e3637",
+    "scripts/run_grid.py": "ad098644833ba5a6948e3034408bdc25a8bf236d4eda284370a0aeccfe4e983c",
+    "src/fvtv/kaggle_backend.py": "e5e5d476e8cd2735d35613e6e124db384ea4fe7098e1d75e4fde360feee82a63",
+    "docs/plans/heldout-validation.md": "b82dbacb3de24f4e05179d404e2d39313d4c1e4f924b3967398fe229bfb26b33",
+    "data/tasks/antonym.json": "ba66e8e399944b557251b11a37b11f9ba7a50f0a57286f7021a8a7b26b469e8d",
+    "data/tasks/country-capital.json": "5748cbfb789c2d671f8a88bf8eaa8a800ead77299e34e1d0cafae11b0409782b",
+    "data/tasks/english-french.json": "766fa28cc696f37b1009f36372372797be03444045c58bc554759f3e177638cc",
+    "data/tasks/present-past.json": "bd6f7d484a967646aa5854740c70803568225f47a5630e1555c39e827ba9c78b",
+    "data/tasks/person-occupation.json": "2c2fac0d4ba5a0aec033005c92ea170c6254f1d30a9b063c9ae5be0ff5d093d7",
+    "data/tasks/singular-plural.json": "beac51d02481a63115f0f7879e0dfc8d70244aeaea4d0a8d5193a5b2dfc07b9b",
+    "data/tasks/synonym.json": "dc0c79f94b70999236ec962465b21ab416074ea2969a980eafa85e9cb2702685",
+    "data/tasks/next_item.json": "fbef21cf40e1c6f4b12100812b09daa8e079f79b84ea3fea0e99637ea70f8873",
+    "sentiment.json": "e63f927bf5920c3acf01dcbdc628bc07118731a77916de4bf0f6e3e443f75413",
+    "revisions.json": "65f1334a71701c7d5ef33802c529f2561e479d62fab8f07a16d5c41b69323808",
+    "execution_protocol.md": "451c153d887acf4cf3a54df91b8abd0267d7691bb53253dee219b4327da12e04"
+  },
+  "models": {
+    "gemma-2-9b": {
+      "stage": "complete",
+      "complete": true,
+      "pilot": {
+        "passed": true,
+        "identity_layers": [
+          0,
+          20,
+          41
+        ],
+        "batching_inputs": 4
+      },
+      "finished": 1788744475.4460783
+    },
+    "gemma-2-9b-it": {
+      "stage": "complete",
+      "complete": true,
+      "pilot": {
+        "passed": true,
+        "identity_layers": [
+          0,
+          20,
+          41
+        ],
+        "batching_inputs": 4
+      },
+      "finished": 1788747087.5497508
+    }
+  }
+}

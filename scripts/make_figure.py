@@ -13,6 +13,8 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
+plt.rcParams.update({"pdf.fonttype": 42, "ps.fonttype": 42})
+
 ROOT = Path(__file__).resolve().parent.parent
 TV, FV = "#33518A", "#DDAA33"
 ORDER = ["gpt-j-6b", "llama-3.1-8b", "gemma-2-9b-it", "llama-3.1-70b"]

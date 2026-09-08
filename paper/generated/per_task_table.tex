@@ -1,0 +1,27 @@
+\begin{tabular}{lcccccccc}
+\toprule
+ & \multicolumn{2}{c}{\textbf{GPT-J}} & \multicolumn{2}{c}{\textbf{L3.1-8B}} & \multicolumn{2}{c}{\textbf{Gemma-2}} & \multicolumn{2}{c}{\textbf{L3.1-70B}} \\
+\textbf{Task} & TV & shuf. & TV & shuf. & TV & shuf. & TV & shuf. \\
+\midrule
+\multicolumn{9}{l}{\emph{linguistic}} \\
+antonym & 0.77 & 0.13 & 0.91 & 0.54 & 0.79 & 0.41 & 0.95 & 0.35 \\
+synonym & 0.81 & 0.00 & 0.73 & 0.47 & 0.58 & 0.24 & 0.84 & 0.48 \\
+present-past & 0.08 & 0.00 & 0.97 & 0.00 & -- & -- & 0.99 & 0.61 \\
+singular-plural & 0.53 & 0.05 & 0.69 & 0.42 & -- & -- & 0.96 & 0.64 \\
+\multicolumn{9}{l}{\emph{knowledge}} \\
+country-capital & 0.74 & 0.15 & 0.96 & 0.14 & 0.92 & 0.31 & 1.03 & 0.88 \\
+country-currency & 0.06 & 0.06 & -- & -- & -- & -- & 0.81 & 0.02 \\
+person-occupation & 1.14 & 1.14 & 0.67 & 0.59 & -- & -- & 0.61 & 0.75 \\
+park-country & -- & -- & -- & -- & -- & -- & 0.99 & 0.77 \\
+\multicolumn{9}{l}{\emph{translation}} \\
+english-french & 0.66 & 0.84 & 0.80 & 0.73 & -- & -- & 0.96 & 0.38 \\
+english-spanish & -- & -- & -- & -- & -- & -- & 0.94 & 0.74 \\
+english-german & 0.65 & 0.57 & -- & -- & -- & -- & 0.68 & 0.43 \\
+\multicolumn{9}{l}{\emph{algorithmic}} \\
+capitalize & 0.47 & 0.07 & -- & -- & 0.46$^{\dagger}$ & 0.92 & 0.78 & 0.58 \\
+capitalize-first-letter & 0.40 & 0.30 & -- & -- & -- & -- & 0.61 & 0.28 \\
+lowercase-first-letter & 0.23$^{\dagger}$ & 0.38 & -- & -- & -- & -- & 0.09 & 0.00 \\
+next-item & 0.52 & 0.28 & 0.92 & 0.45 & 1.19 & 0.39 & 0.87 & 0.40 \\
+prev-item & 0.65 & 0.00 & -- & -- & -- & -- & 0.67 & 0.36 \\
+\bottomrule
+\end{tabular}
