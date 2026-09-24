@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Do Function Vectors and Task Vectors Generalize? (BlackboxNLP 2026 poster)</title>
+<style>
+  /* A0 portrait. Build: python poster/make_poster_figures.py, then
+     chrome --headless=new --allow-file-access-from-files --no-pdf-header-footer --print-to-pdf=poster.pdf poster.html */
+  @font-face { font-family: Lato; src: url("file:///usr/local/texlive/2025/texmf-dist/fonts/truetype/typoland/lato/Lato-Regular.ttf"); font-weight: 400; }
+  @font-face { font-family: Lato; src: url("file:///usr/local/texlive/2025/texmf-dist/fonts/truetype/typoland/lato/Lato-Italic.ttf"); font-weight: 400; font-style: italic; }
+  @font-face { font-family: Lato; src: url("file:///usr/local/texlive/2025/texmf-dist/fonts/truetype/typoland/lato/Lato-Semibold.ttf"); font-weight: 600; }
+  @font-face { font-family: Lato; src: url("file:///usr/local/texlive/2025/texmf-dist/fonts/truetype/typoland/lato/Lato-Bold.ttf"); font-weight: 700; }
+  @font-face { font-family: Raleway; src: url("file:///usr/local/texlive/2025/texmf-dist/fonts/opentype/impallari/raleway/Raleway-SemiBold.otf"); font-weight: 600; }
+  @font-face { font-family: Raleway; src: url("file:///usr/local/texlive/2025/texmf-dist/fonts/opentype/impallari/raleway/Raleway-Bold.otf"); font-weight: 700; }
+  @font-face { font-family: "Source Code Pro"; src: url("file:///usr/local/texlive/2025/texmf-dist/fonts/opentype/adobe/sourcecodepro/SourceCodePro-Regular.otf"); }
+  @page { size: 841mm 1189mm; margin: 0; }
+  :root {
+    --ink: #16202A; --ink3: #3A4654; --slate: #5B6876; --muted: #56606B; --rule: #D5D9DE; --tint: #EEF2F8;
+    --tv: #33518A; --fv: #DDAA33; --fvink: #8C6410; --bad: #B3261E;
+    --head: Raleway, sans-serif; --body: Lato, sans-serif; --mono: "Source Code Pro", monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 841mm; height: 1189mm; }
+  body { background: #fff; color: var(--ink); font-family: var(--body); font-size: 25.5pt; line-height: 1.34;
+         font-variant-numeric: lining-nums; -webkit-print-color-adjust: exact; print-color-adjust: exact;
+         padding: 22mm 24mm 14mm; display: flex; flex-direction: column; gap: 8mm; }
+  b { font-weight: 700; }
+  sup { font-size: .62em; line-height: 0; }
+  .tt { font-family: var(--mono); font-size: .9em; }
+
+  /* header */
+  header { display: grid; grid-template-columns: 1fr 104mm; gap: 12mm; align-items: end;
+           border-bottom: 1.6mm solid var(--ink); padding-bottom: 9mm; }
+  h1 { font-family: var(--head); font-weight: 700; font-size: 104pt; line-height: 1.04; letter-spacing: -.01em; }
+  h1 .fvw { color: var(--fvink); } h1 .tvw { color: var(--tv); }
+  .sub { font-family: var(--head); font-weight: 600; font-size: 44pt; color: var(--ink3); margin-top: 5mm; }
+  .auth { margin-top: 7mm; font-size: 31pt; }
+  .auth span { color: var(--muted); margin-left: 8mm; }
+  .auth .tt { font-size: 24pt; }
+  .venue { font-size: 23pt; color: var(--muted); margin-top: 2mm; }
+  .qr img { width: 100%; display: block; }
+  .qr p { font-size: 17pt; color: var(--muted); margin-top: 3mm; line-height: 1.25; text-align: center; }
+  .qr p b { color: var(--ink); display: block; font-size: 19pt; }
+
+  /* blocks */
+  .blk h2 { font-family: var(--head); font-weight: 700; font-size: 38pt; line-height: 1.12;
+            border-bottom: .9mm solid var(--tv); padding-bottom: 2mm; margin-bottom: 4mm; }
+  .blk.alert { background: var(--tint); padding: 6mm 7mm 7mm; }
+  .blk.alert h2 { color: var(--tv); border: 0; padding: 0; margin-bottom: 3.5mm; }
+  .blk p + p, .blk p + figure, .blk figure + p, .blk figure + figure, .blk ul + p, .blk .barl + p, .blk p + table, .blk table + p { margin-top: 4mm; }
+  figure img, figure svg { width: 100%; display: block; }
+  figcaption { font-size: 19pt; color: var(--muted); line-height: 1.28; margin-top: 2.5mm; }
+  figcaption b { color: var(--ink); }
+  ul.pts { list-style: none; }
+  ul.pts li { padding-left: 1em; position: relative; }
+  ul.pts li + li { margin-top: 2mm; }
+  ul.pts li::before { content: ""; position: absolute; left: .1em; top: .55em; width: .36em; height: .36em; border-radius: 50%; background: var(--tv); }
+  ul.pts.sm { font-size: 22pt; line-height: 1.3; }
+
+  /* summary table */
+  .lead { font-size: 31pt; line-height: 1.25; margin-bottom: 5mm; }
+  .lead b { color: var(--tv); }
+  table.sum { width: 100%; border-collapse: collapse; font-size: 23pt; border-top: .8mm solid var(--ink); border-bottom: .8mm solid var(--ink); }
+  table.sum th { text-align: left; font-weight: 400; vertical-align: top; }
+  table.sum thead tr.t th { font-family: var(--head); font-weight: 700; font-size: 28pt; color: #fff; padding: 3mm 5mm; }
+  table.sum thead tr.t th:nth-child(2) { background: var(--slate); }
+  table.sum thead tr.t th:nth-child(3) { background: var(--ink3); }
+  table.sum thead tr.t th:nth-child(4) { background: var(--ink); }
+  table.sum thead tr.d th { font-size: 18pt; color: var(--muted); line-height: 1.22; padding: 2mm 5mm 3mm; border-bottom: .5mm solid var(--ink); }
+  table.sum td { padding: 1.1mm 5mm; border-bottom: .35mm solid #E3E6EA; white-space: nowrap; vertical-align: middle; }
+  table.sum td:first-child { padding-left: 0; font-weight: 600; width: 18%; }
+  table.sum tr:last-child td { border-bottom: 0; }
+  td .v { font-weight: 700; font-size: 25pt; margin: 0 2.5mm 0 3mm; }
+  td small { font-size: 18pt; color: var(--muted); }
+  td.nr { color: #9AA1A9; font-size: 18pt; }
+  .m { display: inline-block; font-weight: 700; font-size: 17pt; padding: .2mm 2mm; border-radius: 1.2mm; margin-right: 3mm; vertical-align: .12em; }
+  .m.fv { background: var(--fv); color: var(--ink); } .m.tv { background: var(--tv); color: #fff; }
+  .g { display: inline-grid; place-items: center; width: 8mm; height: 8mm; border-radius: 50%; vertical-align: -.2em;
+       font-size: 13pt; font-weight: 700; line-height: 1; }
+  .g.ok { background: var(--ink); color: #fff; } .g.ok::after { content: "\2713"; }
+  .g.wk { border: .8mm solid var(--ink); color: var(--ink); } .g.wk::after { content: "\2713"; }
+  .g.un { border: .8mm solid var(--ink); background: linear-gradient(90deg, var(--ink) 50%, #fff 50%); }
+  .g.ch { border: .8mm solid var(--bad); color: var(--bad); font-size: 16pt; } .g.ch::after { content: "\2248"; }
+  .g.no { background: var(--bad); color: #fff; } .g.no::after { content: "\2715"; }
+  .g.na { border: .6mm dashed #B8BEC5; }
+  .key { display: flex; flex-wrap: wrap; gap: 3mm 8mm; font-size: 19pt; color: var(--muted); margin-top: 3.5mm; align-items: center; }
+  .key .g { width: 6.5mm; height: 6.5mm; font-size: 10pt; margin-right: 1.5mm; }
+  .key .g.ch { font-size: 12pt; }
+
+  /* body columns */
+  main { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14mm; flex: 1; min-height: 0; }
+  .col { display: flex; flex-direction: column; justify-content: space-between; gap: 8mm; min-width: 0; }
+  .bar { display: flex; height: 11mm; font-size: 17pt; font-weight: 700; color: #fff; }
+  .bar div { display: grid; place-items: center; }
+  .barl { display: flex; font-size: 16.5pt; color: var(--muted); margin-top: 1mm; }
+  .barl div { text-align: center; }
+  table.fvn { width: 100%; border-collapse: collapse; font-size: 22pt; border-top: .6mm solid var(--ink); border-bottom: .6mm solid var(--ink); }
+  table.fvn th { font-weight: 600; font-size: 19pt; text-align: right; padding: 1.5mm 2mm; border-bottom: .4mm solid var(--ink); }
+  table.fvn td { text-align: right; padding: 1.4mm 2mm; }
+  table.fvn th:first-child, table.fvn td:first-child { text-align: left; padding-left: 0; }
+  table.fvn td.z { color: var(--bad); font-weight: 700; }
+  ol.conc { list-style: none; counter-reset: c; }
+  ol.conc li { counter-increment: c; display: grid; grid-template-columns: 10mm 1fr; }
+  ol.conc li + li { margin-top: 3.5mm; }
+  ol.conc li::before { content: counter(c); font-family: var(--head); font-weight: 700; color: var(--tv); }
+
+  footer { display: grid; grid-template-columns: 1.75fr 1fr; gap: 14mm; font-size: 16.5pt; color: var(--muted);
+           line-height: 1.3; border-top: .5mm solid var(--rule); padding-top: 4mm; }
+  footer b { color: var(--ink); }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Do <span class="fvw">Function Vectors</span> and<br><span class="tvw">Task Vectors</span> Generalize?</h1>
+    <div class="sub">A Reproducibility Study Across Model Families and Scale</div>
+    <div class="auth"><b>Serendeep Rudraraju</b><span>University of Marburg</span><span class="tt">rudraraj@students.uni-marburg.de</span></div>
+    <div class="venue">BlackboxNLP 2026, Reproducibility Track &nbsp;|&nbsp; EMNLP 2026, Budapest</div>
+  </div>
+  <div class="qr">
+    <img src="fig/qr.svg" alt="QR code for github.com/Serendeep/fv-tv-repro">
+    <p><b>Paper, code and data</b>github.com/Serendeep/fv-tv-repro</p>
+  </div>
+</header>
+
+<section class="blk">
+  <h2>Summary: where each vector beats its control</h2>
+  <p class="lead"><b>On word-pair tasks, mostly yes.</b> On sentiment with arbitrary labels, task vectors stay near chance on every checkpoint.</p>
+  <table class="sum">
+    <thead>
+      <tr class="t"><th></th><th>Test 1&nbsp; Exploratory grid</th><th>Test 2&nbsp; Held-out layers</th><th>Test 3&nbsp; Sentiment</th></tr>
+      <tr class="d"><th>method, model</th>
+        <th>5&ndash;16 word-pair tasks per model. Layer chosen on the evaluation data. Share of the ICL gap recovered.</th>
+        <th>8 tasks. Each vector and each control picks its layer on dev data. Points above control.</th>
+        <th>SST-2-derived reviews, arbitrary labels (A/B and B/A). TV test accuracy; chance is 50%.</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><span class="m fv">FV</span>GPT-J-6B</td><td><i class="g ok"></i><span class="v">0.50</span><small>control &minus;0.01</small></td><td><i class="g ok"></i><span class="v">+35.9</span><small>CI 18.5 to 52.6</small></td><td class="nr"><i class="g na"></i>&nbsp; not run</td></tr>
+      <tr><td><span class="m tv">TV</span>GPT-J-6B</td><td><i class="g wk"></i><span class="v">0.56</span><small>shuffled 0.28, <i>d</i> = 0.78</small></td><td><i class="g ok"></i><span class="v">+16.1</span><small>CI 4.1 to 30.3</small></td><td><i class="g ch"></i><span class="v">52.7%</span><small>ICL 73.5%</small></td></tr>
+      <tr><td><span class="m fv">FV</span>Llama-3.1-8B</td><td><i class="g ok"></i><span class="v">0.42</span><small>control 0.00</small></td><td><i class="g ok"></i><span class="v">+24.3</span><small>CI 7.6 to 42.9</small></td><td class="nr"><i class="g na"></i>&nbsp; not run</td></tr>
+      <tr><td><span class="m tv">TV</span>Llama-3.1-8B</td><td><i class="g ok"></i><span class="v">0.83</span><small>shuffled 0.42</small></td><td><i class="g un"></i><span class="v">&minus;4.2</span><small>CI &minus;20.7 to 8.7</small></td><td><i class="g ch"></i><span class="v">50.0%</span><small>ICL 90.8%</small></td></tr>
+      <tr><td><span class="m tv">TV</span>Llama-3.1-70B</td><td><i class="g ok"></i><span class="v">0.80</span><small>shuffled 0.48</small></td><td class="nr"><i class="g na"></i>&nbsp; not run</td><td class="nr"><i class="g na"></i>&nbsp; not run</td></tr>
+      <tr><td><span class="m fv">FV</span>Gemma-2-9b <small>base</small></td><td class="nr"><i class="g na"></i>&nbsp; not run</td><td><i class="g no"></i><span class="v">0% acc.</span><small>2 tasks, ICL 70&ndash;99%</small></td><td class="nr"><i class="g na"></i>&nbsp; not run</td></tr>
+      <tr><td><span class="m tv">TV</span>Gemma-2-9b <small>base</small></td><td class="nr"><i class="g na"></i>&nbsp; not run</td><td><i class="g ok"></i><span class="v">+19.1</span><small>CI 3.9 to 35.3</small></td><td><i class="g ch"></i><span class="v">49.6%</span><small>ICL 94.0%</small></td></tr>
+      <tr><td><span class="m fv">FV</span>Gemma-2-9b-it</td><td><i class="g no"></i><span class="v">0.01</span><small>control 0.01</small></td><td><i class="g no"></i><span class="v">0% acc.</span><small>2 tasks, ICL 68&ndash;91%</small></td><td class="nr"><i class="g na"></i>&nbsp; not run</td></tr>
+      <tr><td><span class="m tv">TV</span>Gemma-2-9b-it</td><td><i class="g ok"></i><span class="v">0.83</span><small>shuffled 0.39</small></td><td><i class="g ok"></i><span class="v">+32.3</span><small>CI 7.4 to 57.9</small></td><td><i class="g ch"></i><span class="v">50.0%</span><small>ICL 93.3%</small></td></tr>
+    </tbody>
+  </table>
+  <div class="key">
+    <span><b style="color:var(--ink)">Table 1:</b>&nbsp; Tests 1&rarr;2 tighten layer selection; Test 3 changes the task.</span>
+    <span><i class="g ok"></i>pass (Test 1) or CI above 0 (Test 2)</span><span><i class="g wk"></i>weak pass (0.5 &le; <i>d</i> &lt; 0.8)</span>
+    <span><i class="g un"></i>CI includes 0</span><span><i class="g ch"></i>near chance</span><span><i class="g no"></i>fail or 0% accuracy</span><span><i class="g na"></i>not run</span>
+    <span>Gemma cells in Tests 2 and 3 ran on Kaggle; all other runs used NDIF.</span>
+  </div>
+</section>
+
+<main>
+  <div class="col">
+    <section class="blk">
+      <h2>Background</h2>
+      <p>Function vectors (FVs)<sup>[1]</sup> add the summed outputs of causally selected attention heads to the residual stream. Task vectors (TVs)<sup>[2]</sup> copy one hidden state from a demonstration prompt into a zero-shot pass. Both papers claim the vector carries an in-context task into a new prompt.</p>
+      <figure style="margin-top:5mm">
+<svg viewBox="0 0 1000 640" font-family="Lato, sans-serif" fill="#16202A" role="img" aria-label="Function vectors add summed head outputs to the residual stream; task vectors replace one hidden state">
+  <defs>
+    <marker id="g" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#8A8F98"/></marker>
+    <marker id="a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#B8861B"/></marker>
+    <marker id="b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#33518A"/></marker>
+    <style>
+      .box { fill: #fff; stroke: #D5D9DE; stroke-width: 2; }
+      .mono { font-family: "Source Code Pro", monospace; font-size: 20px; }
+      .cap { font-size: 20px; fill: #56606B; }
+      .lay { fill: #fff; stroke: #B8BEC5; stroke-width: 2; }
+      .res { stroke: #8A8F98; stroke-width: 4; fill: none; }
+      .arr { stroke: #8A8F98; stroke-width: 3.5; fill: none; marker-end: url(#g); }
+      .h { fill: #ECEEF1; } .ha { fill: #DDAA33; }
+    </style>
+  </defs>
+  <text x="0" y="28" font-size="28" font-weight="700" fill="#8C6410">Function vectors [1]</text>
+  <text class="cap" x="0" y="68">10-shot prompts</text>
+  <rect class="box" x="0" y="80" width="236" height="170" rx="10"/>
+  <text class="mono" x="16" y="118">Q: hot  A: cold</text>
+  <text class="mono" x="16" y="150">Q: big  A: small</text>
+  <text class="mono" x="16" y="182">Q: up   A: down</text>
+  <text class="mono" x="20" y="222" fill="#8A8F98">&#8942;</text>
+  <path class="arr" d="M244 165H278"/>
+  <g transform="translate(290 88)">
+    <rect class="h" x="0" y="0" width="26" height="26" rx="4"/><rect class="h" x="32" y="0" width="26" height="26" rx="4"/><rect class="h" x="64" y="0" width="26" height="26" rx="4"/><rect class="h" x="96" y="0" width="26" height="26" rx="4"/><rect class="ha" x="128" y="0" width="26" height="26" rx="4"/><rect class="h" x="160" y="0" width="26" height="26" rx="4"/>
+    <rect class="h" x="0" y="32" width="26" height="26" rx="4"/><rect class="ha" x="32" y="32" width="26" height="26" rx="4"/><rect class="h" x="64" y="32" width="26" height="26" rx="4"/><rect class="h" x="96" y="32" width="26" height="26" rx="4"/><rect class="h" x="128" y="32" width="26" height="26" rx="4"/><rect class="h" x="160" y="32" width="26" height="26" rx="4"/>
+    <rect class="h" x="0" y="64" width="26" height="26" rx="4"/><rect class="h" x="32" y="64" width="26" height="26" rx="4"/><rect class="h" x="64" y="64" width="26" height="26" rx="4"/><rect class="ha" x="96" y="64" width="26" height="26" rx="4"/><rect class="h" x="128" y="64" width="26" height="26" rx="4"/><rect class="ha" x="160" y="64" width="26" height="26" rx="4"/>
+    <rect class="ha" x="0" y="96" width="26" height="26" rx="4"/><rect class="h" x="32" y="96" width="26" height="26" rx="4"/><rect class="h" x="64" y="96" width="26" height="26" rx="4"/><rect class="h" x="96" y="96" width="26" height="26" rx="4"/><rect class="h" x="128" y="96" width="26" height="26" rx="4"/><rect class="h" x="160" y="96" width="26" height="26" rx="4"/>
+    <rect class="h" x="0" y="128" width="26" height="26" rx="4"/><rect class="h" x="32" y="128" width="26" height="26" rx="4"/><rect class="ha" x="64" y="128" width="26" height="26" rx="4"/><rect class="h" x="96" y="128" width="26" height="26" rx="4"/><rect class="h" x="128" y="128" width="26" height="26" rx="4"/><rect class="h" x="160" y="128" width="26" height="26" rx="4"/>
+  </g>
+  <text class="cap" x="383" y="274" text-anchor="middle">top-k heads by causal effect</text>
+  <path class="arr" d="M484 165H514"/>
+  <circle cx="545" cy="165" r="25" fill="#fff" stroke="#DDAA33" stroke-width="4"/>
+  <text x="545" y="175" font-size="28" font-weight="700" text-anchor="middle" fill="#8C6410">&#931;</text>
+  <path class="arr" d="M574 165H600"/>
+  <g fill="#DDAA33"><rect x="610" y="112" width="20" height="18" rx="3"/><rect x="610" y="134" width="20" height="18" rx="3" opacity=".75"/><rect x="610" y="156" width="20" height="18" rx="3"/><rect x="610" y="178" width="20" height="18" rx="3" opacity=".6"/><rect x="610" y="200" width="20" height="18" rx="3" opacity=".85"/></g>
+  <text x="620" y="246" font-size="23" font-weight="700" text-anchor="middle" fill="#8C6410">FV</text>
+  <text class="cap" x="995" y="100" text-anchor="end">zero-shot prompt</text>
+  <path class="res" d="M660 175H968" marker-end="url(#g)"/>
+  <rect class="lay" x="674" y="147" width="34" height="56" rx="6"/>
+  <rect x="729" y="147" width="34" height="56" rx="6" fill="#F7E9C6" stroke="#DDAA33" stroke-width="3"/>
+  <text x="746" y="186" font-size="30" font-weight="700" text-anchor="middle" fill="#8C6410">+</text>
+  <rect class="lay" x="784" y="147" width="34" height="56" rx="6"/>
+  <rect class="lay" x="839" y="147" width="34" height="56" rx="6"/>
+  <rect class="lay" x="894" y="147" width="34" height="56" rx="6"/>
+  <path d="M636 106C672 56 746 60 746 139" stroke="#B8861B" stroke-width="3.5" fill="none" marker-end="url(#a)"/>
+  <text class="mono" x="660" y="244">Q: fast  A:</text>
+  <text x="995" y="244" font-size="23" font-weight="700" text-anchor="end">slow <tspan fill="#2F7A4D">&#10003;</tspan></text>
+  <text class="cap" x="800" y="280" text-anchor="middle">added to the residual stream</text>
+
+  <line x1="0" y1="312" x2="1000" y2="312" stroke="#E3E6EA" stroke-width="2" stroke-dasharray="6 8"/>
+
+  <g transform="translate(0 338)">
+    <text x="0" y="28" font-size="28" font-weight="700" fill="#33518A">Task vectors [2]</text>
+    <text class="cap" x="0" y="68">demonstrations + dummy query</text>
+    <rect class="box" x="0" y="80" width="236" height="190" rx="10"/>
+    <text class="mono" x="16" y="118">Q: hot  A: cold</text>
+    <text class="mono" x="16" y="150">Q: big  A: small</text>
+    <text class="mono" x="20" y="190" fill="#8A8F98">&#8942;</text>
+    <text class="mono" x="16" y="248">Q: wet  A:</text>
+    <path class="arr" d="M244 175H278"/>
+    <path class="res" d="M286 175H476" marker-end="url(#g)"/>
+    <rect class="lay" x="296" y="147" width="32" height="56" rx="6"/>
+    <rect class="lay" x="340" y="147" width="32" height="56" rx="6"/>
+    <rect x="384" y="147" width="32" height="56" rx="6" fill="#33518A"/>
+    <text x="400" y="184" font-size="24" font-style="italic" text-anchor="middle" fill="#fff">L</text>
+    <rect class="lay" x="428" y="147" width="32" height="56" rx="6"/>
+    <text class="cap" x="380" y="238" text-anchor="middle">state at layer L,</text>
+    <text class="cap" x="380" y="263" text-anchor="middle">last token</text>
+    <path d="M400 141C424 64 566 62 604 116" stroke="#33518A" stroke-width="3.5" fill="none" marker-end="url(#b)"/>
+    <text x="502" y="70" font-size="20" font-weight="700" text-anchor="middle" fill="#33518A">copy</text>
+    <g fill="#33518A"><rect x="610" y="122" width="20" height="18" rx="3"/><rect x="610" y="144" width="20" height="18" rx="3" opacity=".7"/><rect x="610" y="166" width="20" height="18" rx="3" opacity=".9"/><rect x="610" y="188" width="20" height="18" rx="3" opacity=".6"/><rect x="610" y="210" width="20" height="18" rx="3" opacity=".8"/></g>
+    <text x="620" y="258" font-size="26" font-style="italic" text-anchor="middle" fill="#33518A">&#952;</text>
+    <text class="cap" x="995" y="100" text-anchor="end">zero-shot prompt</text>
+    <path class="res" d="M660 175H968" marker-end="url(#g)"/>
+    <rect class="lay" x="674" y="147" width="34" height="56" rx="6"/>
+    <rect class="lay" x="729" y="147" width="34" height="56" rx="6"/>
+    <rect x="784" y="147" width="34" height="56" rx="6" fill="#33518A"/>
+    <text x="801" y="184" font-size="24" font-style="italic" text-anchor="middle" fill="#fff">&#952;</text>
+    <rect class="lay" x="839" y="147" width="34" height="56" rx="6"/>
+    <rect class="lay" x="894" y="147" width="34" height="56" rx="6"/>
+    <path d="M636 116C680 60 801 62 801 139" stroke="#33518A" stroke-width="3.5" fill="none" marker-end="url(#b)"/>
+    <text class="mono" x="660" y="244">Q: fast  A:</text>
+    <text x="995" y="244" font-size="23" font-weight="700" text-anchor="end">slow <tspan fill="#2F7A4D">&#10003;</tspan></text>
+    <text class="cap" x="800" y="280" text-anchor="middle">replaces the state at layer L</text>
+  </g>
+</svg>
+        <figcaption><b>Figure 1:</b> The two interventions, reimplemented in NNsight<sup>[3]</sup>; the Kaggle Gemma runs use PyTorch hooks.</figcaption>
+      </figure>
+    </section>
+
+    <section class="blk">
+      <h2>Setup</h2>
+      <ul class="pts">
+        <li>GPT-J-6B (used by both papers), Llama-3.1-8B and 70B, and Gemma-2-9b in base and instruction-tuned versions.</li>
+        <li>16 word-pair tasks from [1], scored by top-1 first-token accuracy.</li>
+        <li>Random vectors and random heads as FV controls; label-shuffled demonstrations as TV controls.</li>
+      </ul>
+    </section>
+
+    <section class="blk">
+      <h2>Test 1: Exploratory grid</h2>
+      <figure><img src="fig/effect.svg" alt="Best-layer recovery with 95% CIs and matched controls">
+        <figcaption><b>Figure 2:</b> Best-layer recovery with task-bootstrap 95% CIs; &times; marks the control. Choosing the layer on the scored data favours the real vector.</figcaption></figure>
+      <p>The Gemma-2-9b-it FV recovers 0.01. Scaling it 8&times;, injecting before the post-attention RMSNorm, or picking up to 40 heads by cross-task AIE as in [1] does not restore a consistent advantage.</p>
+    </section>
+  </div>
+
+  <div class="col">
+    <section class="blk">
+      <h2>Test 2: Held-out layer selection</h2>
+      <div class="bar"><div style="flex:5;background:var(--ink3)">construction</div><div style="flex:1.4;background:var(--slate)">dev</div><div style="flex:2;background:var(--ink)">test</div></div>
+      <div class="barl"><div style="flex:5">demonstrations, dummy queries, AIE</div><div style="flex:1.4">25 inputs</div><div style="flex:2">50 inputs</div></div>
+      <p>Vectors are built on construction inputs. Each vector and each control picks its layer on dev inputs and is scored once on test.</p>
+      <figure><img src="fig/heldout.svg" alt="Held-out accuracy above control with 95% CIs">
+        <figcaption><b>Figure 3:</b> Test accuracy above control in percentage points; 95% CIs over eight task means. The gap between the two Gemma checkpoints is uncertain (13.3 points, CI &minus;2.9 to 27.9).</figcaption></figure>
+      <figure><img src="fig/llama_layers.svg" alt="Llama-3.1-8B held-out accuracy: zero-shot 4.1, shuffled at TV layer 34.7, TV 50.0, shuffled at own layer 54.2">
+        <figcaption><b>Figure 4:</b> Llama-3.1-8B held-out test accuracy.</figcaption></figure>
+      <p>At the TV&rsquo;s layer, a shuffled-label vector scores 34.7%. At its own layer it scores 54.2%, against 50.0% for the real TV, so the Llama-3.1-8B comparison is inconclusive.</p>
+    </section>
+
+    <section class="blk alert">
+      <h2>Gemma base vs instruction-tuned (Kaggle)</h2>
+      <p>Both checkpoints share partitions and demonstrations. Kaggle and NDIF agree on 197 of 200 predictions in a limited check (Gemma IT, antonym).</p>
+      <table class="fvn">
+        <tr><th>FV, test accuracy (%)</th><th>ICL</th><th>FV</th><th>control</th></tr>
+        <tr><td>base, antonym</td><td>70.0</td><td class="z">0.0</td><td>0.0</td></tr>
+        <tr><td>base, country-capital</td><td>98.7</td><td class="z">0.0</td><td>0.0</td></tr>
+        <tr><td>IT, antonym</td><td>68.0</td><td class="z">0.0</td><td>0.0</td></tr>
+        <tr><td>IT, country-capital</td><td>90.7</td><td class="z">0.0</td><td>0.0</td></tr>
+      </table>
+      <p>On these two tasks the base checkpoint fails too, so instruction tuning alone does not explain our FV null.</p>
+    </section>
+    <section class="blk">
+      <h2>Limitations</h2>
+      <ul class="pts sm">
+        <li>Our FV recipe picks 10 heads per task and skips the ICL-correct filtering of [1]; the Gemma null is about this implementation.</li>
+        <li>Shuffled controls can keep some correct pairs.</li>
+        <li>The Gemma TV and sentiment extensions were specified after earlier results. First-token accuracy only.</li>
+      </ul>
+    </section>
+  </div>
+
+  <div class="col">
+    <section class="blk">
+      <h2>Test 3: Sentiment with arbitrary labels</h2>
+      <p>Positive reviews map to A and negative to B, or the reverse, so label meaning gives no help<sup>[4]</sup>. ICL learns the mapping. The TV does not.</p>
+      <figure><img src="fig/sentiment.svg" alt="Sentiment accuracy: ICL 73.5 to 94.0 percent, task vectors 49.6 to 52.7 percent">
+        <figcaption><b>Figure 5:</b> Test accuracy, averaged over both mappings and three seeds.</figcaption></figure>
+      <p>In 18 of 24 arbitrary-label cells, the patched model gives every input the same label. Natural labels do no better (49.2&ndash;50.0%).</p>
+    </section>
+
+    <section class="blk">
+      <h2>What a shuffled &theta; keeps</h2>
+      <figure><img src="fig/controls.svg" alt="Exploratory recovery for real, template-swap, label-shuffled and sibling-task vectors">
+        <figcaption><b>Figure 6:</b> Exploratory recovery at the real TV&rsquo;s layer.</figcaption></figure>
+      <p>Shuffled-label states still recover 0.28&ndash;0.48 of the ICL gap (real: 0.56&ndash;0.83); a sibling task&rsquo;s vector recovers almost none. An <span class="tt">x -&gt; y</span> extraction template raises GPT-J capitalization from 0.47 to 0.97.</p>
+    </section>
+
+    <section class="blk alert">
+      <h2>Conclusions</h2>
+      <ol class="conc">
+        <li><div>Success on word pairs does not show broader task transfer. On sentiment, TVs stay near chance on all four checkpoints.</div></li>
+        <li><div>Controls need their own held-out layer. Gains over zero-shot accuracy can overstate transfer.</div></li>
+        <li><div>Our FV implementation works on GPT-J and Llama-3.1-8B and fails on both Gemma checkpoints in a two-task follow-up. The cause is open.</div></li>
+      </ol>
+    </section>
+
+  </div>
+</main>
+
+<footer>
+  <div><b>References.</b> [1] Todd, Li, Sharma, Mueller, Wallace, Bau. Function vectors in large language models. ICLR 2024. [2] Hendel, Geva, Globerson. In-context learning creates task vectors. Findings of EMNLP 2023. [3] Fiotto-Kaufman et al. NNsight and NDIF: Democratizing access to open-weight foundation model internals. ICLR 2025. [4] Wei et al. Larger language models do in-context learning differently. arXiv:2303.03846, 2023.</div>
+  <div><b>Acknowledgments.</b> Model access through NDIF shared deployments; Gemma runs on Kaggle (2&times; T4). We thank the NDIF and NNsight teams.</div>
+</footer>
+
+</body>
+</html>

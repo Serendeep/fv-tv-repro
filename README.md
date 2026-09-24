@@ -51,6 +51,8 @@ export HF_TOKEN=<your token>
 - `data/classification/` - sentiment inputs and attribution.
 - `notebooks/` - frozen Kaggle execution notebooks for the Gemma follow-ups.
 - `paper/` - manuscript source, compiled PDF, figures, and generated tables.
+- `poster/` - A0 conference poster (`poster.html`, built `poster.pdf`); figures regenerate
+  from `results/` with `make_poster_figures.py`.
 - `tests/` - offline checks for analysis, split isolation, selection, and resuming runs.
 
 ## How to reproduce the tables
