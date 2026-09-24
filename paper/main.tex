@@ -23,7 +23,7 @@
 \maketitle
 
 \begin{abstract}
-A language model can learn a task from examples in its prompt. Function vectors (FVs) and task vectors (TVs) aim to transfer that behavior to a new prompt by modifying the model's activations. We reproduce both methods on word-pair tasks across GPT-J, Llama-3.1, and Gemma-2. In held-out tests, FVs outperform random controls on GPT-J and Llama. TVs outperform shuffled-label controls on GPT-J and both base and instruction-tuned Gemma; the Llama comparison is inconclusive. Our FV implementation achieves zero accuracy on both Gemma checkpoints in a two-task follow-up. Sentiment classification shows a further limitation: in-context learning (ICL) achieves 73.5--94.0\% accuracy with arbitrary labels, while TVs achieve only 49.6--52.7\%. Successful transfer on word pairs therefore does not extend to this sentiment dataset. Separating vector construction, layer selection, and testing also shows why gains over zero-shot accuracy can overstate the evidence for transfer. Code and data are available online.\footnote{\url{https://github.com/Serendeep/fv-tv-repro}}
+A language model can learn a task from examples in its prompt. Function vectors (FVs) and task vectors (TVs) aim to transfer that behavior to a new prompt by modifying the model's activations. We reproduce both methods on word-pair tasks across GPT-J, Llama-3.1, and Gemma-2. In held-out tests, FVs outperform random controls on GPT-J and Llama-3.1-8B. TVs outperform shuffled-label controls on GPT-J and both base and instruction-tuned Gemma; the Llama-8B comparison is inconclusive. Our FV implementation achieves zero accuracy on both Gemma checkpoints in a two-task follow-up. Sentiment classification shows a further limitation: in-context learning (ICL) achieves 73.5--94.0\% accuracy with arbitrary labels, while TVs achieve only 49.6--52.7\%. Successful transfer on word pairs therefore does not extend to this sentiment dataset. Separating vector construction, layer selection, and testing also shows why gains over zero-shot accuracy can overstate the evidence for transfer. Code and data are available online.\footnote{\url{https://github.com/Serendeep/fv-tv-repro}}
 \end{abstract}
 
 \section{Introduction}
@@ -123,7 +123,7 @@ A ratio above 1 means the intervention exceeds its ICL baseline. The exploratory
 
 FV controls are a norm-matched Gaussian vector and a random-10-head vector. The TV control permutes demonstration labels among the same inputs, sometimes retaining correct pairs. In the exploratory grid, all controls use the real method's best evaluation layer.
 
-Each exploratory seed draws new demonstrations and evaluation rows. We estimate 95\% intervals by resampling tasks 10,000 times and pooling their seeds. Tasks with more completed seeds therefore receive more weight. Every reported grid cell has an ICL-minus-zero-shot accuracy gap of at least 0.2.
+A grid cell is one model--method--task--seed combination. Each exploratory seed draws new demonstrations and evaluation rows. We estimate 95\% intervals by resampling tasks 10,000 times and pooling their seeds. Tasks with more completed seeds therefore receive more weight. Every reported grid cell has an ICL-minus-zero-shot accuracy gap of at least 0.2.
 
 For C1.1 and C2.1, a \emph{pass} requires a positive paired method-minus-control interval and Cohen's $d\geq0.8$. A \emph{weak pass} uses the same interval criterion with $0.5\leq d<0.8$. We average the two FV controls before computing paired differences. Appendix~\ref{sec:panel-analyses} defines the grading and effect sizes.
 
@@ -166,7 +166,7 @@ TVs show positive paired effects across all four checkpoints in the exploratory 
   \small
   \setlength{\tabcolsep}{4pt}
   \input{generated/main_results_table}
-  \caption{Exploratory-grid best-layer recovery estimates and matched controls.}
+  \caption{Exploratory best-layer recovery and matched controls. CV uses held-out seeds and a different cell subset (Appendix~\ref{sec:panel-analyses}).}
   \label{tab:numbers}
 \end{table}
 
@@ -185,6 +185,8 @@ TVs show positive paired effects across all four checkpoints in the exploratory 
   \caption{Exploratory-grid mean recovery by layer depth. FV is dashed; TV is solid.}
   \label{fig:layer-profiles}
 \end{figure}
+
+Figure~\ref{fig:layer-profiles} averages recovery at each layer; Table~\ref{tab:numbers} first selects the best layer for each task and seed.
 
 TV recovery peaks at intermediate layers on all four models (Figure~\ref{fig:layer-profiles}): layer 12 of 28 on GPT-J, 14 of 32 on Llama-3.1-8B, 24 of 42 on Gemma-2, and 30 of 80 at 70B. Recovery falls toward the final swept layers, matching C2.2. GPT-J's sweep reaches layer 24.
 
@@ -273,7 +275,7 @@ TVs exceed shuffled controls by 19.1 points on base Gemma and 32.3 on Gemma IT (
 
 Word pairs often have familiar answers. Sentiment classification lets us test transfer with unfamiliar output labels. We use short movie-review texts from the SST-2-derived dataset released by \citet{todd2024function}. In one condition, positive reviews map to A and negative reviews to B. A second condition reverses the mapping. We also test the natural labels, positive and negative. Arbitrary labels probe reliance on familiar label meanings in ICL \citep{wei2023larger}.
 
-All conditions use the same inputs and construction choices. Each model receives ten balanced demonstrations, with 40 balanced development inputs and 80 balanced test inputs. Three construction seeds give 36 cells across GPT-J, Llama-8B, and both Gemma checkpoints. Appendix~\ref{sec:extension-protocol} gives the full protocol.
+All conditions use the same inputs and construction choices. Each model receives ten balanced demonstrations, with 40 balanced development inputs and 80 balanced test inputs. Four checkpoints, three label mappings, and three construction seeds give 36 cells. Appendix~\ref{sec:extension-protocol} gives the full protocol.
 
 \begin{figure}[t]
   \centering
@@ -284,19 +286,19 @@ All conditions use the same inputs and construction choices. Each model receives
 
 ICL reaches 73.5--94.0\% with arbitrary labels. TV accuracy stays at 49.6--52.7\%, close to the 50\% constant-class baseline (Figure~\ref{fig:sentiment}). In 18 of 24 arbitrary-label TV cells, the model predicts the same token for every test input. All four intervals for TV minus shuffled controls cross zero. Table~\ref{tab:sentiment-full} gives the per-mapping results.
 
-Natural labels do not rescue transfer: TV accuracy is 50.0\% on GPT-J, Llama, and base Gemma, and 49.2\% on Gemma IT. The failure therefore extends to both natural and arbitrary labels on this dataset, despite strong ICL. These comparisons do not establish statistical equivalence to controls.
+Natural labels do not rescue transfer: TV accuracy is 50.0\% on GPT-J, Llama-8B, and base Gemma, and 49.2\% on Gemma IT. The failure therefore extends to both natural and arbitrary labels on this dataset, despite strong ICL. These comparisons do not establish statistical equivalence to controls.
 
 \section{Discussion}
 \label{sec:discussion}
 
-Gains over zero-shot accuracy alone can overstate transfer. On Llama, TVs improve accuracy without an established advantage over shuffled demonstrations. Both Gemma checkpoints retain an advantage on word pairs, but all four checkpoints transfer little sentiment behavior. Giving each control its own development-selected layer makes these comparisons less dependent on the real vector's preferred site.
+Gains over zero-shot accuracy alone can overstate transfer. On Llama-8B, TVs improve accuracy without an established advantage over shuffled demonstrations. Both Gemma checkpoints retain an advantage on word pairs, but all four checkpoints transfer little sentiment behavior. Giving each control its own development-selected layer makes these comparisons less dependent on the real vector's preferred site.
 
-Prompt format also matters. Changing the extraction template restores recovery on two weak capitalization tasks. Label shuffling preserves part of the effect on many tasks. Together, these results show why transfer should be tested against changes in demonstration content and format, consistent with broader studies of steering reliability \citep{tan2024analysing}. FV and TV effect sizes remain distinct because their controls differ.
+The observed limits differ across tasks. Changing the extraction template restores recovery on two weak capitalization tasks, while sentiment transfer remains weak with both natural and arbitrary labels. Label shuffling preserves part of the effect on many word-pair tasks. These patterns support testing transfer across demonstration content and format, consistent with broader studies of steering reliability \citep{tan2024analysing}. FV and TV effect sizes remain distinct because their controls differ.
 
 \section{Conclusion}
 \label{sec:conclusion}
 
-FV and TV transfer holds on several word-pair tasks, with different limits across checkpoints. FVs beat random controls on GPT-J and Llama, but our Gemma implementation fails in the two-task follow-up. TVs beat shuffled controls on GPT-J and both Gemma checkpoints; the Llama comparison is inconclusive. On sentiment, all four checkpoints show strong ICL but weak TV transfer. A successful intervention on word pairs is therefore insufficient evidence of broader task transfer.
+FV and TV transfer holds on several word-pair tasks, with different limits across checkpoints. FVs beat random controls on GPT-J and Llama-8B, but our Gemma implementation fails in the two-task follow-up. TVs beat shuffled controls on GPT-J and both Gemma checkpoints; the Llama-8B comparison is inconclusive. On sentiment, all four checkpoints show strong ICL but weak TV transfer. A successful intervention on word pairs is therefore insufficient evidence of broader task transfer.
 
 \section*{Acknowledgments}
 
