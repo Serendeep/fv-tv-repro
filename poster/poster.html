@@ -126,7 +126,7 @@
 
 <section class="blk">
   <h2>Summary: where each vector beats its control</h2>
-  <p class="lead"><b>On word-pair tasks, mostly yes.</b> On sentiment with arbitrary labels, task vectors stay near chance on every checkpoint.</p>
+  <p class="lead"><b>On word-pair tasks, mostly yes.</b> On sentiment with arbitrary labels, task vectors stay near chance on every checkpoint tested.</p>
   <table class="sum">
     <thead>
       <tr class="t"><th></th><th>Test 1&nbsp; Exploratory grid</th><th>Test 2&nbsp; Held-out layers</th><th>Test 3&nbsp; Sentiment</th></tr>
@@ -298,7 +298,8 @@
       <h2>Limitations</h2>
       <ul class="pts sm">
         <li>Our FV recipe picks 10 heads per task and skips the ICL-correct filtering of [1]; the Gemma null is about this implementation.</li>
-        <li>Shuffled controls can keep some correct pairs.</li>
+        <li>Tests&nbsp;2 and&nbsp;3 cover 6B&ndash;9B checkpoints. Llama-3.1-70B ran only in Test&nbsp;1, and Test&nbsp;3 tested TVs only.</li>
+        <li>Shuffled controls can keep some correct pairs. Test&nbsp;2 CIs resample eight tasks with test inputs held fixed.</li>
         <li>The Gemma TV and sentiment extensions were specified after earlier results. First-token accuracy only.</li>
       </ul>
     </section>
