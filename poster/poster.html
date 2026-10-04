@@ -26,7 +26,7 @@
          padding: 22mm 24mm 14mm; display: flex; flex-direction: column; gap: 8mm; }
   b { font-weight: 700; }
   sup { font-size: .62em; line-height: 0; }
-  .tt { font-family: var(--mono); font-size: .9em; }
+  .tt { font-family: var(--mono); font-size: .9em; white-space: nowrap; }
 
   /* header */
   header { display: grid; grid-template-columns: 1fr 104mm; gap: 12mm; align-items: end;
@@ -75,7 +75,7 @@
   td.nr { color: #9AA1A9; font-size: 18pt; }
   .m { display: inline-block; font-weight: 700; font-size: 17pt; padding: .2mm 2mm; border-radius: 1.2mm; margin-right: 3mm; vertical-align: .12em; }
   .m.fv { background: var(--fv); color: var(--ink); } .m.tv { background: var(--tv); color: #fff; }
-  .g { display: inline-grid; place-items: center; width: 8mm; height: 8mm; border-radius: 50%; vertical-align: -.2em;
+  .g { display: inline-grid; place-items: center; width: 8mm; height: 8mm; border-radius: 50%; vertical-align: middle;
        font-size: 13pt; font-weight: 700; line-height: 1; }
   .g.ok { background: var(--ink); color: #fff; } .g.ok::after { content: "\2713"; }
   .g.wk { border: .8mm solid var(--ink); color: var(--ink); } .g.wk::after { content: "\2713"; }
@@ -283,7 +283,7 @@
     </section>
 
     <section class="blk alert">
-      <h2>Gemma base vs instruction-tuned (Kaggle)</h2>
+      <h2>Gemma: base vs instruction-tuned</h2>
       <p>Both checkpoints share partitions and demonstrations. Kaggle and NDIF agree on 197 of 200 predictions in a limited check (Gemma IT, antonym).</p>
       <table class="fvn">
         <tr><th>FV, test accuracy (%)</th><th>ICL</th><th>FV</th><th>control</th></tr>
