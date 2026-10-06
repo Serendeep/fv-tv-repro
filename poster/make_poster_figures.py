@@ -83,7 +83,7 @@ def effect():
     ax.set_yticks(ticks, labels, fontsize=21, color=MUTED)
     ax.set_xlim(-0.06, 1.2)
     ax.set_ylim(y + 0.55, 1.15)
-    ax.axvline(0, color=RULE, lw=1.5, zorder=0)
+    ax.axvline(0, color=INK, lw=2, zorder=0)
     ax.set_xticks([0, 0.5, 1.0], ["0", "0.5", "1"])
     ax.grid(axis="x", color="#ECEEF1", lw=1.5)
     ax.set_xlabel("share of the in-context accuracy gap recovered", fontsize=22, labelpad=10)
@@ -112,7 +112,7 @@ def heldout():
              g["gemma-2-9b"]["aggregate"]["ci95"]),
             ("tv", "Gemma-2-9b-it", g["gemma-2-9b-it"]["aggregate"]["difference"],
              g["gemma-2-9b-it"]["aggregate"]["ci95"])]
-    fig, ax = plt.subplots(figsize=(9.4, 6.8))
+    fig, ax = plt.subplots(figsize=(9.4, 6.6))
     ys, y, prev = [], 0, None
     for method, name, d, (lo, hi) in rows:
         if method != prev:
@@ -136,7 +136,7 @@ def heldout():
     ax.grid(axis="x", color="#ECEEF1", lw=1.5)
     ax.set_xlabel("test accuracy above control (percentage points)", fontsize=22, labelpad=10)
     clean(ax)
-    ax.axhspan(-6.4, -4.4, color="#F1F3F5", zorder=0, lw=0)
+    ax.axhspan(-6.4, -4.4, color="#E4E8EE", zorder=0, lw=0)
     ax.text(-24, -4.5, "run on Kaggle", ha="left", va="top", fontsize=18, color=MUTED)
     save(fig, "heldout")
 
@@ -157,7 +157,7 @@ def llama_layers():
             ("shuffled θ at its own layer", task_mean("control_mean"), CTRL)]
     # paper/generated/heldout_accuracy_table.tex: 4.1, 34.7, 50.0, 54.2
     assert [round(v, 1) for _, v, _ in vals] == [4.1, 34.7, 50.0, 54.2], vals
-    fig, ax = plt.subplots(figsize=(9.4, 3.8))
+    fig, ax = plt.subplots(figsize=(8.1, 3.8))
     for i, (lab, v, c) in enumerate(vals[::-1]):
         ax.barh(i, v, height=0.66, color=c, zorder=3)
         ax.text(v + 1.2, i, f"{v:.1f}%", va="center", fontsize=22,
@@ -176,7 +176,7 @@ def sentiment():
     s = EXT["sentiment"]
     models = [("gpt-j-6b", "GPT-J-6B"), ("llama-3.1-8b", "Llama-3.1-8B"),
               ("gemma-2-9b", "Gemma-2-9b base"), ("gemma-2-9b-it", "Gemma-2-9b-it")]
-    fig, ax = plt.subplots(figsize=(9.4, 6.2))
+    fig, ax = plt.subplots(figsize=(9.4, 7.0))
     ax.axvline(50, color=INK, lw=2, ls=(0, (4, 3)), zorder=1)
     ax.text(50.8, 3.75, "constant-label baseline", ha="left", fontsize=18, color=MUTED)
     for i, (m, name) in enumerate(models):
@@ -184,7 +184,8 @@ def sentiment():
         y = 3 - i
         ax.hlines(y, r["real"], r["icl"], color=RULE, lw=4, zorder=2)
         ax.plot(r["icl"], y, "s", ms=18, color=INK, zorder=4)
-        ax.plot(r["control"], y, "x", ms=15, mew=3.5, color=CTRL, zorder=6)
+        # ponytail: control drawn just below the TV dot so the two stay distinguishable at ~50%
+        ax.plot(r["control"], y - 0.24, "x", ms=15, mew=3.5, color=CTRL, zorder=6)
         ax.plot(r["real"], y, "o", ms=19, color=TV, mec="white", mew=2, zorder=5)
         ax.text(r["icl"] + 1.6, y, f"{r['icl']:.1f}", va="center", fontsize=21, fontweight="demibold")
         ax.text(min(r["real"], r["control"]) - 3.4, y, f"{r['real']:.1f}", va="center", ha="right", fontsize=21,
@@ -207,15 +208,15 @@ def sentiment():
 def controls():
     """What survives in a task vector: exploratory controls at the real TV's layer."""
     # paper/generated/tv_control_table.tex
-    variants = ["real θ", "template swap", "label-shuffled", "sibling-task θ"]
+    variants = ["real θ", "x → y template", "shuffled labels", "related task"]
     vals = {"GPT-J-6B": [0.56, 0.41, 0.28, -0.01],
             "Llama-3.1-8B": [0.83, 0.69, 0.42, 0.06],
             "Llama-3.1-70B": [0.80, 0.55, 0.48, 0.03]}
-    fig, axes = plt.subplots(1, 3, figsize=(9.4, 5.6), sharey=True)
+    fig, axes = plt.subplots(1, 3, figsize=(9.4, 6.0), sharey=True)
     ys = list(range(len(variants)))[::-1]
     for ax, (model, v) in zip(axes, vals.items()):
         for yi, x, i in zip(ys, v, range(len(v))):
-            ax.barh(yi, max(x, 0.006), height=0.66, color=TV if i == 0 else "#9DAECB", zorder=3)
+            ax.barh(yi, max(x, 0.006), height=0.66, color=TV if i == 0 else "#B8BEC5", zorder=3)
             ax.text(max(x, 0) + 0.05, yi, f"{x:.2f}".replace("-", "−"), va="center",
                     fontsize=20, fontweight="bold" if i == 0 else "normal")
         ax.set_title(model, fontsize=21, fontweight="bold", loc="left", pad=8)

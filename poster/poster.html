@@ -21,7 +21,7 @@
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { width: 841mm; height: 1189mm; }
-  body { background: #fff; color: var(--ink); font-family: var(--body); font-size: 25.5pt; line-height: 1.34;
+  body { background: #fff; color: var(--ink); font-family: var(--body); font-size: 28pt; line-height: 1.34;
          font-variant-numeric: lining-nums; -webkit-print-color-adjust: exact; print-color-adjust: exact;
          padding: 22mm 24mm 14mm; display: flex; flex-direction: column; gap: 8mm; }
   b { font-weight: 700; }
@@ -39,7 +39,7 @@
   .auth .tt { font-size: 24pt; }
   .venue { font-size: 23pt; color: var(--muted); margin-top: 2mm; }
   .qr img { width: 100%; display: block; }
-  .qr p { font-size: 17pt; color: var(--muted); margin-top: 3mm; line-height: 1.25; text-align: center; }
+  .qr p { font-size: 17pt; color: var(--muted); margin-top: 6mm; line-height: 1.25; text-align: center; }
   .qr p b { color: var(--ink); display: block; font-size: 19pt; }
 
   /* blocks */
@@ -47,18 +47,19 @@
             border-bottom: .9mm solid var(--tv); padding-bottom: 2mm; margin-bottom: 4mm; }
   .blk.alert { background: var(--tint); padding: 6mm 7mm 7mm; }
   .blk.alert h2 { color: var(--tv); border: 0; padding: 0; margin-bottom: 3.5mm; }
+  .blk.alert.side { background: none; border-left: 1.2mm solid var(--tv); padding: 1mm 0 1mm 7mm; }
   .blk p + p, .blk p + figure, .blk figure + p, .blk figure + figure, .blk ul + p, .blk .barl + p, .blk p + table, .blk table + p { margin-top: 4mm; }
   figure img, figure svg { width: 100%; display: block; }
-  figcaption { font-size: 19pt; color: var(--muted); line-height: 1.28; margin-top: 2.5mm; }
+  figcaption { font-size: 21pt; color: var(--muted); line-height: 1.28; margin-top: 2.5mm; }
   figcaption b { color: var(--ink); }
   ul.pts { list-style: none; }
   ul.pts li { padding-left: 1em; position: relative; }
   ul.pts li + li { margin-top: 2mm; }
   ul.pts li::before { content: ""; position: absolute; left: .1em; top: .55em; width: .36em; height: .36em; border-radius: 50%; background: var(--tv); }
-  ul.pts.sm { font-size: 22pt; line-height: 1.3; }
+  ul.pts.sm { font-size: 25pt; line-height: 1.3; }
 
   /* summary table */
-  .lead { font-size: 31pt; line-height: 1.25; margin-bottom: 5mm; }
+  .lead { font-size: 33pt; line-height: 1.25; margin-bottom: 5mm; }
   .lead b { color: var(--tv); }
   table.sum { width: 100%; border-collapse: collapse; font-size: 23pt; border-top: .8mm solid var(--ink); border-bottom: .8mm solid var(--ink); }
   table.sum th { text-align: left; font-weight: 400; vertical-align: top; }
@@ -66,6 +67,7 @@
   table.sum thead tr.t th:nth-child(2) { background: var(--slate); }
   table.sum thead tr.t th:nth-child(3) { background: var(--ink3); }
   table.sum thead tr.t th:nth-child(4) { background: var(--ink); }
+  table.sum thead tr.d th b { color: var(--ink); }
   table.sum thead tr.d th { font-size: 18pt; color: var(--muted); line-height: 1.22; padding: 2mm 5mm 3mm; border-bottom: .5mm solid var(--ink); }
   table.sum td { padding: 1.1mm 5mm; border-bottom: .35mm solid #E3E6EA; white-space: nowrap; vertical-align: middle; }
   table.sum td:first-child { padding-left: 0; font-weight: 600; width: 18%; }
@@ -76,16 +78,16 @@
   .m { display: inline-block; font-weight: 700; font-size: 17pt; padding: .2mm 2mm; border-radius: 1.2mm; margin-right: 3mm; vertical-align: .12em; }
   .m.fv { background: var(--fv); color: var(--ink); } .m.tv { background: var(--tv); color: #fff; }
   .g { display: inline-grid; place-items: center; width: 8mm; height: 8mm; border-radius: 50%; vertical-align: middle;
-       font-size: 13pt; font-weight: 700; line-height: 1; }
+       font-size: 15pt; font-weight: 700; line-height: 1; }
   .g.ok { background: var(--ink); color: #fff; } .g.ok::after { content: "\2713"; }
-  .g.wk { border: .8mm solid var(--ink); color: var(--ink); } .g.wk::after { content: "\2713"; }
-  .g.un { border: .8mm solid var(--ink); background: linear-gradient(90deg, var(--ink) 50%, #fff 50%); }
-  .g.ch { border: .8mm solid var(--bad); color: var(--bad); font-size: 16pt; } .g.ch::after { content: "\2248"; }
+  .g.wk { border: 1mm solid var(--ink); color: var(--ink); } .g.wk::after { content: "\2713"; }
+  .g.un { border: 1mm solid var(--ink); background: linear-gradient(90deg, var(--ink) 50%, #fff 50%); }
+  .g.ch { border: 1mm solid var(--bad); color: var(--bad); font-size: 18pt; } .g.ch::after { content: "\2248"; }
   .g.no { background: var(--bad); color: #fff; } .g.no::after { content: "\2715"; }
   .g.na { border: .6mm dashed #B8BEC5; }
-  .key { display: flex; flex-wrap: wrap; gap: 3mm 8mm; font-size: 19pt; color: var(--muted); margin-top: 3.5mm; align-items: center; }
-  .key .g { width: 6.5mm; height: 6.5mm; font-size: 10pt; margin-right: 1.5mm; }
-  .key .g.ch { font-size: 12pt; }
+  .key { display: flex; flex-wrap: wrap; gap: 3mm 8mm; font-size: 20pt; color: var(--muted); margin-top: 3.5mm; align-items: center; }
+  .key .g { width: 8mm; height: 8mm; font-size: 15pt; margin-right: 2mm; }
+  .key .g.ch { font-size: 18pt; }
 
   /* body columns */
   main { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14mm; flex: 1; min-height: 0; }
@@ -120,20 +122,20 @@
   </div>
   <div class="qr">
     <img src="fig/qr.svg" alt="QR code for serendeep.tech/research/function-task-vectors">
-    <p><b>Paper, code and data</b>serendeep.tech/research/<br>function-task-vectors</p>
+    <p><b>Paper, code and data</b>serendeep.tech/research/<br>function-task-vectors<br>github.com/Serendeep/fv-tv-repro</p>
   </div>
 </header>
 
 <section class="blk">
   <h2>Summary: where each vector beats its control</h2>
-  <p class="lead"><b>On word-pair tasks, mostly yes.</b> On sentiment with arbitrary labels, task vectors stay near chance on every checkpoint tested.</p>
+  <p class="lead"><b>On word pairs, mostly yes,</b> except our Gemma FVs and the held-out <span style="white-space:nowrap">Llama-8B</span> TV. On sentiment, no. TVs stay near chance with arbitrary or natural labels.</p>
   <table class="sum">
     <thead>
       <tr class="t"><th></th><th>Test 1&nbsp; Exploratory grid</th><th>Test 2&nbsp; Held-out layers</th><th>Test 3&nbsp; Sentiment</th></tr>
       <tr class="d"><th>method, model</th>
-        <th>5&ndash;16 word-pair tasks per model. Layer chosen on the evaluation data. Share of the ICL gap recovered.</th>
-        <th>8 tasks. Each vector and each control picks its layer on dev data. Points above control.</th>
-        <th>SST-2-derived reviews, arbitrary labels (A/B and B/A). TV test accuracy; chance is 50%.</th></tr>
+        <th>5&ndash;16 tasks. Layer picked on the scored data. <b>Share of ICL gap recovered.</b></th>
+        <th>8 tasks. Vectors and controls each pick a layer on dev data. <b>Points above control.</b></th>
+        <th>SST-2 reviews, A/B labels. <b>TV accuracy</b>; chance is 50%. TV minus shuffled: all CIs include 0.</th></tr>
     </thead>
     <tbody>
       <tr><td><span class="m fv">FV</span>GPT-J-6B</td><td><i class="g ok"></i><span class="v">0.50</span><small>control &minus;0.01</small></td><td><i class="g ok"></i><span class="v">+35.9</span><small>CI 18.5 to 52.6</small></td><td class="nr"><i class="g na"></i>&nbsp; not run</td></tr>
@@ -149,8 +151,8 @@
   </table>
   <div class="key">
     <span><b style="color:var(--ink)">Table 1:</b>&nbsp; Tests 1&rarr;2 tighten layer selection; Test 3 changes the task.</span>
-    <span><i class="g ok"></i>pass (Test 1) or CI above 0 (Test 2)</span><span><i class="g wk"></i>weak pass (0.5 &le; <i>d</i> &lt; 0.8)</span>
-    <span><i class="g un"></i>CI includes 0</span><span><i class="g ch"></i>near chance</span><span><i class="g no"></i>fail or 0% accuracy</span><span><i class="g na"></i>not run</span>
+    <span><i class="g ok"></i>pass (Test 1: CI above 0, <i>d</i> &ge; 0.8) or CI above 0 (Test 2, ungraded)</span><span><i class="g wk"></i>weak pass (0.5 &le; <i>d</i> &lt; 0.8)</span>
+    <span><i class="g un"></i>CI includes 0</span><span><i class="g ch"></i>near chance</span><span><i class="g no"></i>fail (Test 1) or 0% accuracy (Test 2)</span><span><i class="g na"></i>not run</span>
     <span>Gemma cells in Tests 2 and 3 ran on Kaggle; all other runs used NDIF.</span>
   </div>
 </section>
@@ -159,7 +161,7 @@
   <div class="col">
     <section class="blk">
       <h2>Background</h2>
-      <p>Function vectors (FVs)<sup>[1]</sup> add the summed outputs of causally selected attention heads to the residual stream. Task vectors (TVs)<sup>[2]</sup> copy one hidden state from a demonstration prompt into a zero-shot pass. Both papers claim the vector carries an in-context task into a new prompt.</p>
+      <p>Function vectors (FVs)<sup>[1]</sup> add the mean outputs of a few causally chosen attention heads (by AIE) to the residual stream. Task vectors (TVs, &theta;)<sup>[2]</sup> copy one hidden state from a demonstration prompt into a zero-shot pass. Both papers say the vector carries the task.</p>
       <figure style="margin-top:5mm">
 <svg viewBox="0 0 1000 640" font-family="Lato, sans-serif" fill="#16202A" role="img" aria-label="Function vectors add summed head outputs to the residual stream; task vectors replace one hidden state">
   <defs>
@@ -168,8 +170,8 @@
     <marker id="b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0L10 5L0 10z" fill="#33518A"/></marker>
     <style>
       .box { fill: #fff; stroke: #D5D9DE; stroke-width: 2; }
-      .mono { font-family: "Source Code Pro", monospace; font-size: 20px; }
-      .cap { font-size: 20px; fill: #56606B; }
+      .mono { font-family: "Source Code Pro", monospace; font-size: 22px; }
+      .cap { font-size: 24px; fill: #56606B; }
       .lay { fill: #fff; stroke: #B8BEC5; stroke-width: 2; }
       .res { stroke: #8A8F98; stroke-width: 4; fill: none; }
       .arr { stroke: #8A8F98; stroke-width: 3.5; fill: none; marker-end: url(#g); }
@@ -197,7 +199,7 @@
   <text x="545" y="175" font-size="28" font-weight="700" text-anchor="middle" fill="#8C6410">&#931;</text>
   <path class="arr" d="M574 165H600"/>
   <g fill="#DDAA33"><rect x="610" y="112" width="20" height="18" rx="3"/><rect x="610" y="134" width="20" height="18" rx="3" opacity=".75"/><rect x="610" y="156" width="20" height="18" rx="3"/><rect x="610" y="178" width="20" height="18" rx="3" opacity=".6"/><rect x="610" y="200" width="20" height="18" rx="3" opacity=".85"/></g>
-  <text x="620" y="246" font-size="23" font-weight="700" text-anchor="middle" fill="#8C6410">FV</text>
+  <text x="620" y="248" font-size="26" font-weight="700" text-anchor="middle" fill="#8C6410">FV</text>
   <text class="cap" x="995" y="100" text-anchor="end">zero-shot prompt</text>
   <path class="res" d="M660 175H968" marker-end="url(#g)"/>
   <rect class="lay" x="674" y="147" width="34" height="56" rx="6"/>
@@ -208,7 +210,7 @@
   <rect class="lay" x="894" y="147" width="34" height="56" rx="6"/>
   <path d="M636 106C672 56 746 60 746 139" stroke="#B8861B" stroke-width="3.5" fill="none" marker-end="url(#a)"/>
   <text class="mono" x="660" y="244">Q: fast  A:</text>
-  <text x="995" y="244" font-size="23" font-weight="700" text-anchor="end">slow <tspan fill="#2F7A4D">&#10003;</tspan></text>
+  <text x="995" y="244" font-size="26" font-weight="700" text-anchor="end">slow <tspan fill="#2F7A4D">&#10003;</tspan></text>
   <text class="cap" x="800" y="280" text-anchor="middle">added to the residual stream</text>
 
   <line x1="0" y1="312" x2="1000" y2="312" stroke="#E3E6EA" stroke-width="2" stroke-dasharray="6 8"/>
@@ -231,7 +233,7 @@
     <text class="cap" x="380" y="238" text-anchor="middle">state at layer L,</text>
     <text class="cap" x="380" y="263" text-anchor="middle">last token</text>
     <path d="M400 141C424 64 566 62 604 116" stroke="#33518A" stroke-width="3.5" fill="none" marker-end="url(#b)"/>
-    <text x="502" y="70" font-size="20" font-weight="700" text-anchor="middle" fill="#33518A">copy</text>
+    <text x="502" y="70" font-size="24" font-weight="700" text-anchor="middle" fill="#33518A">copy</text>
     <g fill="#33518A"><rect x="610" y="122" width="20" height="18" rx="3"/><rect x="610" y="144" width="20" height="18" rx="3" opacity=".7"/><rect x="610" y="166" width="20" height="18" rx="3" opacity=".9"/><rect x="610" y="188" width="20" height="18" rx="3" opacity=".6"/><rect x="610" y="210" width="20" height="18" rx="3" opacity=".8"/></g>
     <text x="620" y="258" font-size="26" font-style="italic" text-anchor="middle" fill="#33518A">&#952;</text>
     <text class="cap" x="995" y="100" text-anchor="end">zero-shot prompt</text>
@@ -244,28 +246,28 @@
     <rect class="lay" x="894" y="147" width="34" height="56" rx="6"/>
     <path d="M636 116C680 60 801 62 801 139" stroke="#33518A" stroke-width="3.5" fill="none" marker-end="url(#b)"/>
     <text class="mono" x="660" y="244">Q: fast  A:</text>
-    <text x="995" y="244" font-size="23" font-weight="700" text-anchor="end">slow <tspan fill="#2F7A4D">&#10003;</tspan></text>
+    <text x="995" y="244" font-size="26" font-weight="700" text-anchor="end">slow <tspan fill="#2F7A4D">&#10003;</tspan></text>
     <text class="cap" x="800" y="280" text-anchor="middle">replaces the state at layer L</text>
   </g>
 </svg>
-        <figcaption><b>Figure 1:</b> The two interventions, reimplemented in NNsight<sup>[3]</sup>; the Kaggle Gemma runs use PyTorch hooks.</figcaption>
+        <figcaption><b>Figure 1:</b> The two methods, reimplemented in NNsight<sup>[3]</sup>.</figcaption>
       </figure>
     </section>
 
     <section class="blk">
       <h2>Setup</h2>
       <ul class="pts">
-        <li>GPT-J-6B (used by both papers), Llama-3.1-8B and 70B, and Gemma-2-9b in base and instruction-tuned versions.</li>
-        <li>16 word-pair tasks from [1], scored by top-1 first-token accuracy.</li>
-        <li>Random vectors and random heads as FV controls; label-shuffled demonstrations as TV controls.</li>
+        <li>GPT-J-6B, Llama-3.1-8B and 70B, Gemma-2-9b base and IT.</li>
+        <li>16 word-pair tasks from [1]; first-token accuracy.</li>
+        <li>Random vectors and heads control FVs; shuffled labels control TVs.</li>
       </ul>
     </section>
 
     <section class="blk">
       <h2>Test 1: Exploratory grid</h2>
       <figure><img src="fig/effect.svg" alt="Best-layer recovery with 95% CIs and matched controls">
-        <figcaption><b>Figure 2:</b> Best-layer recovery with task-bootstrap 95% CIs; &times; marks the control. Choosing the layer on the scored data favours the real vector.</figcaption></figure>
-      <p>The Gemma-2-9b-it FV recovers 0.01. Scaling it 8&times;, injecting before the post-attention RMSNorm, or picking up to 40 heads by cross-task AIE as in [1] does not restore a consistent advantage.</p>
+        <figcaption><b>Figure 2:</b> Share of the ICL gap recovered, with 95% CIs. &times;: control. Hollow: shared heads (<i>k</i> = 40). Picking the layer on scored data favours the real vector.</figcaption></figure>
+      <p>Scaling the Gemma FV up to 8&times;, moving it before the RMSNorm, or using 40 shared heads (closer to [1]) does not rescue it.</p>
     </section>
   </div>
 
@@ -274,17 +276,17 @@
       <h2>Test 2: Held-out layer selection</h2>
       <div class="bar"><div style="flex:5;background:var(--ink3)">construction</div><div style="flex:1.4;background:var(--slate)">dev</div><div style="flex:2;background:var(--ink)">test</div></div>
       <div class="barl"><div style="flex:5">demonstrations, dummy queries, AIE</div><div style="flex:1.4">25 inputs</div><div style="flex:2">50 inputs</div></div>
-      <p>Vectors are built on construction inputs. Each vector and each control picks its layer on dev inputs and is scored once on test.</p>
+      <p>Build on one split, pick the layer on dev, score once on test. As in [2], vectors pick their own layer. What&rsquo;s new is that controls do too.</p>
       <figure><img src="fig/heldout.svg" alt="Held-out accuracy above control with 95% CIs">
-        <figcaption><b>Figure 3:</b> Test accuracy above control in percentage points; 95% CIs over eight task means. The gap between the two Gemma checkpoints is uncertain (13.3 points, CI &minus;2.9 to 27.9).</figcaption></figure>
+        <figcaption><b>Figure 3:</b> Points above control, 95% CIs over 8 tasks.</figcaption></figure>
       <figure><img src="fig/llama_layers.svg" alt="Llama-3.1-8B held-out accuracy: zero-shot 4.1, shuffled at TV layer 34.7, TV 50.0, shuffled at own layer 54.2">
-        <figcaption><b>Figure 4:</b> Llama-3.1-8B held-out test accuracy.</figcaption></figure>
-      <p>At the TV&rsquo;s layer, a shuffled-label vector scores 34.7%. At its own layer it scores 54.2%, against 50.0% for the real TV, so the Llama-3.1-8B comparison is inconclusive.</p>
+        <figcaption><b>Figure 4:</b> Llama-3.1-8B. Given its own layer, the shuffled control beats the real TV.</figcaption></figure>
+      <p>The gap across tasks is &minus;4.2 points (CI &minus;20.7 to 8.7), so the result is inconclusive.</p>
     </section>
 
-    <section class="blk alert">
+    <section class="blk alert side">
       <h2>Gemma: base vs instruction-tuned</h2>
-      <p>Both checkpoints share partitions and demonstrations. Kaggle and NDIF agree on 197 of 200 predictions in a limited check (Gemma IT, antonym).</p>
+      <p>Same splits and demonstrations for both. Kaggle matches NDIF on 197 of 200 checked predictions.</p>
       <table class="fvn">
         <tr><th>FV, test accuracy (%)</th><th>ICL</th><th>FV</th><th>control</th></tr>
         <tr><td>base, antonym</td><td>70.0</td><td class="z">0.0</td><td>0.0</td></tr>
@@ -292,15 +294,15 @@
         <tr><td>IT, antonym</td><td>68.0</td><td class="z">0.0</td><td>0.0</td></tr>
         <tr><td>IT, country-capital</td><td>90.7</td><td class="z">0.0</td><td>0.0</td></tr>
       </table>
-      <p>On these two tasks the base checkpoint fails too, so instruction tuning alone does not explain our FV null.</p>
+      <p>The base model fails too, so instruction tuning alone doesn&rsquo;t explain it.</p>
     </section>
     <section class="blk">
       <h2>Limitations</h2>
       <ul class="pts sm">
-        <li>Our FV recipe picks 10 heads per task and skips the ICL-correct filtering of [1]; the Gemma null is about this implementation.</li>
-        <li>Tests&nbsp;2 and&nbsp;3 cover 6B&ndash;9B checkpoints. Llama-3.1-70B ran only in Test&nbsp;1, and Test&nbsp;3 tested TVs only.</li>
-        <li>Shuffled controls can keep some correct pairs. Test&nbsp;2 CIs resample eight tasks with test inputs held fixed.</li>
-        <li>The Gemma TV and sentiment extensions were specified after earlier results. First-token accuracy only.</li>
+        <li>Our recipes differ from [1] and [2] (FV: 10 heads per task, no ICL-correct filter; TV: Q:/A: prompts). The Gemma null is about our implementation.</li>
+        <li>Tests&nbsp;2 and&nbsp;3 use 6B&ndash;9B models only. Test&nbsp;3 is TV-only.</li>
+        <li>CIs resample 8 tasks; test inputs are fixed.</li>
+        <li>Follow-ups were chosen after earlier results.</li>
       </ul>
     </section>
   </div>
@@ -308,25 +310,25 @@
   <div class="col">
     <section class="blk">
       <h2>Test 3: Sentiment with arbitrary labels</h2>
-      <p>Positive reviews map to A and negative to B, or the reverse, so label meaning gives no help<sup>[4]</sup>. ICL learns the mapping. The TV does not.</p>
+      <p>Positive maps to A and negative to B, or the reverse, so label meaning can&rsquo;t help<sup>[4]</sup>. ICL learns this. The TV doesn&rsquo;t.</p>
       <figure><img src="fig/sentiment.svg" alt="Sentiment accuracy: ICL 73.5 to 94.0 percent, task vectors 49.6 to 52.7 percent">
-        <figcaption><b>Figure 5:</b> Test accuracy, averaged over both mappings and three seeds.</figcaption></figure>
-      <p>In 18 of 24 arbitrary-label cells, the patched model gives every input the same label. Natural labels do no better (49.2&ndash;50.0%).</p>
+        <figcaption><b>Figure 5:</b> Mean of both mappings, 3 seeds. &times;: shuffled control.</figcaption></figure>
+      <p>In 18 of 24 cases the patched model gives every review the same answer.</p>
     </section>
 
     <section class="blk">
-      <h2>What a shuffled &theta; keeps</h2>
+      <h2>Shuffled &theta; still works</h2>
       <figure><img src="fig/controls.svg" alt="Exploratory recovery for real, template-swap, label-shuffled and sibling-task vectors">
-        <figcaption><b>Figure 6:</b> Exploratory recovery at the real TV&rsquo;s layer.</figcaption></figure>
-      <p>Shuffled-label states still recover 0.28&ndash;0.48 of the ICL gap (real: 0.56&ndash;0.83); a sibling task&rsquo;s vector recovers almost none. An <span class="tt">x -&gt; y</span> extraction template raises GPT-J capitalization from 0.47 to 0.97.</p>
+        <figcaption><b>Figure 6:</b> Test 1 recovery at the real TV&rsquo;s layer.</figcaption></figure>
+      <p>Shuffled labels keep about half the effect, consistent with task recognition<sup>[5,6]</sup>. A related task&rsquo;s &theta; does almost nothing.</p>
     </section>
 
     <section class="blk alert">
       <h2>Conclusions</h2>
       <ol class="conc">
-        <li><div>Success on word pairs does not show broader task transfer. On sentiment, TVs stay near chance on all four checkpoints.</div></li>
-        <li><div>Controls need their own held-out layer. Gains over zero-shot accuracy can overstate transfer.</div></li>
-        <li><div>Our FV implementation works on GPT-J and Llama-3.1-8B and fails on both Gemma checkpoints in a two-task follow-up. The cause is open.</div></li>
+        <li><div>Word-pair success does not imply broader transfer. On sentiment, TVs stay near chance on all four checkpoints.</div></li>
+        <li><div>Controls need their own held-out layer. On <span style="white-space:nowrap">Llama-8B</span>, it removes the TV&rsquo;s apparent win.</div></li>
+        <li><div>Our FV works on GPT-J and <span style="white-space:nowrap">Llama-8B</span> but not on Gemma. The cause is open.</div></li>
       </ol>
     </section>
 
@@ -334,8 +336,8 @@
 </main>
 
 <footer>
-  <div><b>References.</b> [1] Todd, Li, Sharma, Mueller, Wallace, Bau. Function vectors in large language models. ICLR 2024. [2] Hendel, Geva, Globerson. In-context learning creates task vectors. Findings of EMNLP 2023. [3] Fiotto-Kaufman et al. NNsight and NDIF: Democratizing access to open-weight foundation model internals. ICLR 2025. [4] Wei et al. Larger language models do in-context learning differently. arXiv:2303.03846, 2023.</div>
-  <div><b>Acknowledgments.</b> Model access through NDIF shared deployments; Gemma runs on Kaggle (2&times; T4). We thank the NDIF and NNsight teams.</div>
+  <div><b>References.</b> [1] Todd, Li, Sharma, Mueller, Wallace, Bau. Function vectors in large language models. ICLR 2024. [2] Hendel, Geva, Globerson. In-context learning creates task vectors. Findings of EMNLP 2023. [3] Fiotto-Kaufman et al. NNsight and NDIF: Democratizing access to open-weight foundation model internals. ICLR 2025. [4] Wei et al. Larger language models do in-context learning differently. arXiv:2303.03846, 2023. [5] Min et al. Rethinking the role of demonstrations: What makes in-context learning work? EMNLP 2022. [6] Pan, Gao, Chen, Chen. What in-context learning &ldquo;learns&rdquo; in-context: Disentangling task recognition and task learning. Findings of ACL 2023.</div>
+  <div><b>Acknowledgments.</b> Model access through NDIF shared deployments; matched Gemma runs on Kaggle (2&times; T4). We thank the NDIF and NNsight teams.</div>
 </footer>
 
 </body>
